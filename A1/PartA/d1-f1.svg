@@ -3,36 +3,38 @@
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 width="637.316px" height="273.752px" viewBox="0 0 637.316 273.752" style="enable-background:new 0 0 637.316 273.752;"
 	 xml:space="preserve">
-<rect x="447.751" y="18.544" style="fill:none;stroke:#000000;stroke-miterlimit:10;" width="170.079" height="124.724"/>
-<rect x="22.555" y="222.638" style="fill:none;stroke:#000000;stroke-miterlimit:10;" width="240.945" height="28.346"/>
-<line style="fill:none;stroke:#000000;stroke-miterlimit:10;" x1="447.751" y1="18.544" x2="206.681" y2="80.906"/>
+<rect x="447.751" y="18.544" style="fill:none;stroke:#000000;stroke-width:3;stroke-miterlimit:10;" width="170.079" height="124.724"/>
+<rect x="22.555" y="222.638" style="fill:none;stroke:#000000;stroke-width:3;stroke-miterlimit:10;" width="240.945" height="28.346"/>
+<line style="fill:none;stroke:#000000;stroke-width:3;stroke-miterlimit:10;" x1="447.751" y1="18.544" x2="206.681" y2="80.906"/>
 <g>
 	<g>
-		<line style="fill:none;stroke:#000000;stroke-miterlimit:10;" x1="65.376" y1="222.638" x2="206.681" y2="80.906"/>
+		
+			<line style="fill:none;stroke:#000000;stroke-width:3;stroke-miterlimit:10;" x1="65.376" y1="222.638" x2="206.681" y2="80.906"/>
 		<g>
-			<path d="M66.707,223.965c-0.733,0.735-1.923,0.737-2.659,0.004c-0.735-0.733-0.737-1.923-0.004-2.659
-				c0.733-0.735,1.923-0.737,2.659-0.004S67.44,223.23,66.707,223.965z"/>
+			<path d="M69.37,226.62c-2.199,2.205-5.77,2.211-7.976,0.012c-2.205-2.199-2.211-5.77-0.012-7.976
+				c2.199-2.205,5.77-2.211,7.976-0.012C71.563,220.843,71.569,224.414,69.37,226.62z"/>
 		</g>
 		<g>
-			<polygon points="204.76,87.338 203.853,86.916 206.612,80.975 200.68,83.752 200.256,82.847 208.676,78.905 			"/>
+			<polygon points="200.918,100.201 198.196,98.935 206.474,81.113 188.677,89.445 187.406,86.729 212.667,74.902 			"/>
 		</g>
 	</g>
 </g>
 <g>
 	<g>
-		<line style="fill:none;stroke:#000000;stroke-miterlimit:10;" x1="263.499" y1="222.638" x2="303.672" y2="151.772"/>
+		
+			<line style="fill:none;stroke:#000000;stroke-width:3;stroke-miterlimit:10;" x1="263.499" y1="222.638" x2="303.672" y2="151.772"/>
 		<g>
-			<path d="M265.135,223.565c-0.512,0.903-1.659,1.22-2.562,0.708s-1.22-1.659-0.708-2.562s1.659-1.22,2.562-0.708
-				C265.33,221.515,265.647,222.662,265.135,223.565z"/>
+			<path d="M268.406,225.419c-1.536,2.709-4.978,3.661-7.688,2.125c-2.709-1.536-3.661-4.978-2.125-7.687
+				c1.536-2.709,4.978-3.661,7.687-2.125C268.99,219.268,269.941,222.71,268.406,225.419z"/>
 		</g>
 		<g>
-			<polygon points="303.524,158.483 302.537,158.316 303.624,151.857 298.639,156.107 297.991,155.346 305.065,149.314 			"/>
+			<polygon points="303.228,171.905 300.268,171.405 303.527,152.027 288.574,164.777 286.628,162.495 307.852,144.397 			"/>
 		</g>
 	</g>
 </g>
-<line style="fill:none;stroke:#000000;stroke-miterlimit:10;" x1="447.751" y1="143.268" x2="303.672" y2="151.772"/>
-<text transform="matrix(1 0 0 1 166.0042 82.9532)" style="font-family:'TimesNewRomanPS-ItalicMT'; font-size:12px;">C</text>
-<text transform="matrix(0.583 0 0 0.583 174.0081 86.9493)" style="font-family:'TimesNewRomanPS-ItalicMT'; font-size:12px;">outside</text>
-<text transform="matrix(1 0 0 1 298.173 173.723)" style="font-family:'TimesNewRomanPS-ItalicMT'; font-size:12px;">C</text>
-<text transform="matrix(0.583 0 0 0.583 306.1769 177.7191)" style="font-family:'TimesNewRomanPS-ItalicMT'; font-size:12px;">inside</text>
+<line style="fill:none;stroke:#000000;stroke-width:3;stroke-miterlimit:10;" x1="447.751" y1="143.268" x2="303.672" y2="151.772"/>
+<text transform="matrix(1 0 0 1 34.8766 80.9056)" style="font-family:'TimesNewRomanPS-ItalicMT'; font-size:52.815px;">C</text>
+<text transform="matrix(0.583 0 0 0.583 70.1037 98.493)" style="font-family:'TimesNewRomanPS-ItalicMT'; font-size:52.815px;">outside</text>
+<text transform="matrix(1 0 0 1 297.9822 222.638)" style="font-family:'TimesNewRomanPS-ItalicMT'; font-size:52px;">C</text>
+<text transform="matrix(0.583 0 0 0.583 332.6658 239.9539)" style="font-family:'TimesNewRomanPS-ItalicMT'; font-size:52px;">inside</text>
 </svg>

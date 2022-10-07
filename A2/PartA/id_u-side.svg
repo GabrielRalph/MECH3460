@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 26.5.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="116.1px" height="134.1px" viewBox="0 0 116.1 134.1" style="enable-background:new 0 0 116.1 134.1;" xml:space="preserve"
+	>
+<style type="text/css">
+	.st0{fill:none;stroke:#000000;stroke-miterlimit:10;}
+	.st1{fill:none;stroke:#000000;stroke-miterlimit:10;stroke-dasharray:3;}
+	.st2{opacity:0.5;}
+	.st3{fill:none;stroke:#000000;stroke-miterlimit:10;stroke-dasharray:2.9518,2.9518;}
+	.st4{fill:none;stroke:#000000;stroke-miterlimit:10;stroke-dasharray:3.0093,3.0093;}
+	.st5{fill:none;stroke:#A033FF;stroke-miterlimit:10;}
+	.st6{fill:#A033FF;}
+	.st7{fill:none;stroke:#FF390B;stroke-miterlimit:10;}
+	.st8{fill:#FF390B;}
+	.st9{fill:none;stroke:#39B54A;stroke-miterlimit:10;}
+	.st10{fill:#39B54A;}
+	.st11{fill:none;stroke:#0071BC;stroke-miterlimit:10;}
+	.st12{fill:#0071BC;}
+	.st13{fill:#D4145A;}
+	.st14{fill:none;stroke:#000000;stroke-width:2;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st15{fill:none;stroke:#000000;stroke-width:0.5;stroke-miterlimit:10;}
+	.st16{fill:none;stroke:#000000;stroke-width:0.5;stroke-miterlimit:10;stroke-dasharray:6.5,3;}
+	.st17{fill:none;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st18{font-family:'TimesNewRomanPS-ItalicMT';}
+	.st19{font-size:12px;}
+	.st20{fill:none;stroke:#000000;stroke-width:0.5;stroke-miterlimit:10;stroke-dasharray:7,3;}
+</style>
+<polyline class="st14" points="100.2,117.2 34.3,117.2 34.3,34.3 100.2,34.3 "/>
+<text transform="matrix(1 0 0 1 64.2842 14.9148)" class="st18 st19">b</text>
+<line class="st15" x1="34.3" y1="34.3" x2="34.3" y2="4.3"/>
+<line class="st15" x1="100.2" y1="34.3" x2="100.2" y2="4.3"/>
+<g>
+	<g>
+		<line class="st15" x1="71.6" y1="11.8" x2="95.8" y2="11.8"/>
+		<g>
+			<polygon points="94.8,13.2 100.2,11.8 94.8,10.3 			"/>
+		</g>
+	</g>
+</g>
+<g>
+	<g>
+		<line class="st15" x1="38.7" y1="11.8" x2="63" y2="11.8"/>
+		<g>
+			<polygon points="39.7,13.2 34.3,11.8 39.7,10.3 			"/>
+		</g>
+	</g>
+</g>
+<g>
+	<text transform="matrix(1 0 0 1 8.3196 78.9047)" class="st18 st19">d</text>
+	<line class="st15" x1="34.3" y1="34.3" x2="4.3" y2="34.3"/>
+	<line class="st15" x1="34.3" y1="117.2" x2="4.3" y2="117.2"/>
+	<g>
+		<g>
+			<line class="st15" x1="11.8" y1="82.5" x2="11.8" y2="112.8"/>
+			<g>
+				<polygon points="10.3,111.8 11.8,117.2 13.2,111.8 				"/>
+			</g>
+		</g>
+	</g>
+	<g>
+		<g>
+			<line class="st15" x1="11.8" y1="38.7" x2="11.8" y2="69.5"/>
+			<g>
+				<polygon points="10.3,39.7 11.8,34.3 13.2,39.7 				"/>
+			</g>
+		</g>
+	</g>
+</g>
+<line class="st16" x1="103.3" y1="75.8" x2="29" y2="75.8"/>
+<text transform="matrix(1 0 0 1 20.9068 78.9043)" class="st18 st19">X</text>
+<text transform="matrix(1 0 0 1 103.2805 79.0365)" class="st18 st19">X</text>
+<text transform="matrix(1 0 0 1 63.0458 29.6539)" class="st18 st19">Y</text>
+<text transform="matrix(1 0 0 1 63.0458 129.8605)" class="st18 st19">Y</text>
+<line class="st20" x1="61.8" y1="27.3" x2="61.8" y2="124.3"/>
+</svg>

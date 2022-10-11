@@ -1,5 +1,40 @@
 import {SvgPlus} from "../SvgPlus/4.js"
 
+window.MathJax = {
+  loader: {load: ['[tex]/color', '[tex]/colortbl']},
+  tex: {
+    packages: {'[+]': ['color', 'colortbl']},
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    macros: {
+      trans: `\\underset{heat}{\\overset{cool}{\\rightleftharpoons}}`,
+      mat: ["\\left[ \\begin{matrix} #1 \\end{matrix} \\right]", 1],
+      eq: ["\\begin{equation} #1 \\label{#2} \\end{equation}", 2],
+      dpar: ["\\cfrac{\\partial #1}{\\partial #2}", 2],
+      hl: ["{\\color{WildStrawberry} #1}", 1],
+      red: ["{\\color{BrickRed} {#1}_1}", 1],
+      blue: ["{\\color{RoyalBlue} {#1}_2}", 1],
+    },
+    tags: "ams",
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
+
+async function loadMathJax(){
+    var head = document.getElementsByTagName("head")[0];
+    let script = document.createElement("script");
+    script.type = "text/javascript";
+    return new Promise(function(resolve, reject) {
+      script.onload = () => {
+        resolve()
+      }
+      script.src  = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+      head.appendChild(script);
+    });
+}
+
+
 class PlotImage extends SvgPlus {
   onconnect(){
     let src = this.getAttribute("src");
@@ -12,6 +47,7 @@ class PlotImage extends SvgPlus {
       return await this.loading;
     }
 
+    console.log("%cloading plot...", "color: yellow;");
     let data = await fetch(src);
     let json = await data.json();
     let {width, height, imgsrc, pixelstart, pixelend, pixelpoints, rangestart, rangeend} = json;
@@ -37,6 +73,7 @@ class PlotImage extends SvgPlus {
 
       return y;
     }
+    console.log("%c\t\tplot loaded", "color: yellow;");
     this.loading = null;
   }
 }
@@ -89,9 +126,23 @@ class SolverFrame extends SvgPlus {
     if (this.loading instanceof Promise) {
       return await this.loading;
     }
-    this.init_outputs()
+    console.log("%cinitialising...", "color: #1cdbfa;");
+
+
+    this.init_outputs();
+    console.log("%c\t\tinit outputs", "color: #1cdbfa;");
+
+    console.log("%c\t\tloading all plots", "color: #1cdbfa;");
+
     await this.init_plot_images();
+    console.log("%c\t\tloaded all plots", "color: #1cdbfa;");
+
     this.init_inputs();
+    console.log("%c\t\tinit all inputs", "color: #1cdbfa;");
+
+    await loadMathJax();
+    console.log("%c\t\tMathJax loaded", "color: #1cdbfa;");
+
     this.loading = false;
   }
 
@@ -137,15 +188,20 @@ class SolverFrame extends SvgPlus {
       this.waiting = true;
       await this.loading;
     }
-    console.log("update");
+
+    console.log("%cupdating...", "color: lime;");
     let scope = this.scope;
+    console.log("%c\t\tvariables computed", "color: lime;");
+
 
     for (let solverMethod of this._solver_methods) {
-      // console.log(solverMethod);
       solverMethod(scope);
     }
+    console.log("%c\t\tsolver methods run", "color: lime;");
+
 
     this.render_outputs(scope);
+    console.log("%c\t\toutput rendered", "color: lime;");
     this.waiting = false;
   }
 

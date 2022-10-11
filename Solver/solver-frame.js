@@ -1,4 +1,4 @@
-import {SvgPlus} from "..SvgPlus/4.js"
+import {SvgPlus} from "../SvgPlus/4.js"
 
 class PlotImage extends SvgPlus {
   onconnect(){

@@ -2,13 +2,15 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Test Assignment</title>
+    <title>Demo Assignment</title>
+    <link rel="stylesheet" href="https://arcms.w4v.es/Assets/Supreme/stylesheet.css">
 
   </head>
   <body>
     <h1>Straight Shaft Selection</h1>
     <solver-frame>
-      Shaft material properties
+
+      <h2>Shaft material properties</h2>
       <row-1>
         <div>$F_U$ = </div>
         <div><input value = "550" class = "variable" name = "FU"/> MPa</div>
@@ -21,12 +23,15 @@
         <div>$F_R$ = </div>
         <div><input value = "FY*0.45"  class = "variable" name = "FR"/> MPa</div>
       </row-1>
-      Factor of Safety
+
+      <h2>Factor of Safety</h2>
       <row-1>
         <div>$F_S$ = </div>
         <div><input value = "2"  class = "variable" name = "FS"/> </div>
       </row-1>
 
+
+      <h2>Applied Force and Moments</h2>
       <row-1>
         <div>$M_q$ = </div>
         <div><input value = "100"  class = "variable" name = "Mq"/> $\text{N}\cdot\text{m}$</div>
@@ -40,6 +45,7 @@
         <div><input value = "100"  class = "variable" name = "Pq"/> $\text{N}$</div>
       </row-1>
 
+      <h2>Trial Diameter</h2>
       <div>
         An initial trial diameter was selected.
       </div>
@@ -47,17 +53,19 @@
         <div>$D_0$ = </div>
         <div><input value = 25  class = "variable" name = "D0"/> mm</div>
       </row-1>
+      <br />
 
+      <h2>Stress Raising Factors</h2>
       <div>
         To calculate the stress raising factor $K_s$ a point was taken on the plot.
       </div>
-
       <plot-image class = "variable" name = "Ks_D" src = "../Solver/PlotImageData/Ks(D).json">
       </plot-image>
 
+      <h2>Results</h2>
       <output>
         The following equation, from the AS1403-2004 rotating shaft standards $$\hat{D}^3 = \cfrac{10^4F_S}{F_R}K_s K \sqrt{\left( M_q + \cfrac{P_q D}{8000}\right)^2 + \cfrac{3}{4}T_q^2}$$ for a shaft with more than 600 start stops and more than 900 power applied torque reversals per year
-        was used to find a better diamter $\hat{D}$ from a guess diameter. Itterations where continued until $\left| \cfrac{\hat{D} - D}{\hat{D}} \right| \le 0.1\%$. Given a trial diameter of $D_0 = ~{D0}\text{mm}$ a final diameter of $$D = ~{D}\text{mm}$$
+        was used to find a better diamter $\hat{D}$ from a guess diameter $D$. Itterations where continued until $\left| \cfrac{\hat{D} - D}{\hat{D}} \right| \le 0.1\%$. Given a trial diameter of $D_0 = ~{D0}\text{mm}$ a final diameter of $$D = ~{D}\text{mm}$$
       </output>
     </solver-frame>
   </body>
@@ -95,13 +103,20 @@
   <style>
     body {
       display: flex;
+      font-family: "Supreme LL TT";
+      font-weight: 300;
       flex-direction: column;
       font-size: calc(0.9vmax + 0.9vmin);
       margin: 6em;
     }
+    h2 {
+      margin-bottom: 0.5em;
+      font-weight: 300;
+      /* text-align: center;; */
+    }
     row-1 {
       display: flex;
-      justify-content: center;
+      /* justify-content: center; */
       gap: 0.5em;
       align-items: center;
       min-height: 3em;

@@ -1,39 +1,5 @@
 import {SvgPlus} from "../SvgPlus/4.js"
-
-window.MathJax = {
-  loader: {load: ['[tex]/color', '[tex]/colortbl']},
-  tex: {
-    packages: {'[+]': ['color', 'colortbl']},
-    inlineMath: [['$', '$'], ['\\(', '\\)']],
-    macros: {
-      trans: `\\underset{heat}{\\overset{cool}{\\rightleftharpoons}}`,
-      mat: ["\\left[ \\begin{matrix} #1 \\end{matrix} \\right]", 1],
-      eq: ["\\begin{equation} #1 \\label{#2} \\end{equation}", 2],
-      dpar: ["\\cfrac{\\partial #1}{\\partial #2}", 2],
-      hl: ["{\\color{WildStrawberry} #1}", 1],
-      red: ["{\\color{BrickRed} {#1}_1}", 1],
-      blue: ["{\\color{RoyalBlue} {#1}_2}", 1],
-    },
-    tags: "ams",
-  },
-  svg: {
-    fontCache: 'global'
-  }
-};
-
-async function loadMathJax(){
-    var head = document.getElementsByTagName("head")[0];
-    let script = document.createElement("script");
-    script.type = "text/javascript";
-    return new Promise(function(resolve, reject) {
-      script.onload = () => {
-        resolve()
-      }
-      script.src  = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
-      head.appendChild(script);
-    });
-}
-
+import {loadTypeset, typeset} from "./typeset.js"
 
 class PlotImage extends SvgPlus {
   onconnect(){
@@ -140,7 +106,7 @@ class SolverFrame extends SvgPlus {
     this.init_inputs();
     console.log("%c\t\tinit all inputs", "color: #1cdbfa;");
 
-    await loadMathJax();
+    await loadTypeset();
     console.log("%c\t\tMathJax loaded", "color: #1cdbfa;");
 
     this.loading = false;
@@ -217,9 +183,7 @@ class SolverFrame extends SvgPlus {
       });
       output.innerHTML = html;
     }
-    if (MathJax && MathJax.typeset) {
-      MathJax.typeset(outputs);
-    }
+    typeset(outputs);
   }
 }
 

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script type = "module" src = "./plots.js"></script>
+  </head>
+
+  <body>
+    <svg-plot
+      title = "My Crazy Plot"
+      plot-size = "500, 200"
+      font-size = "10"
+      axis-start = "52, 0"
+      axis-end = "312, 130"
+      x-label = "Current (mA)"
+      y-label = "Voltage (V)"
+      ></svg-plot>
+      $\red{hello}$
+  </body>
+  <script type = "module">
+    let plot = document.querySelector("svg-plot");
+    plot.addSignal([[70, 10], [200, 50]], "a")
+  </script>
+  <style>
+    .signals path {
+      stroke: black;
+      fill: none;
+      stroke-endcap: round;
+    }
+    svg-plot {
+      display: grid;
+      grid-template-columns: 1.5em;
+    }
+    svg-plot .title {
+      grid-row-start: 1;
+      grid-column-start: 1;
+      grid-row-end: 1;
+      grid-column-end: 3;
+      text-align: center;
+      font-size: 1.5em;
+    }
+
+    svg-plot svg{
+      grid-row-start: 2;
+      grid-column-start: 2;
+      grid-row-end: 2;
+      grid-column-end: 2;
+    }
+    .y-label {
+      grid-row-start: 2;
+      grid-column-start: 1;
+      grid-row-end: 2;
+      grid-column-end: 1;
+      text-align: center;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+    }
+    .x-label {
+      grid-row-start: 3;
+      grid-column-start: 2;
+      grid-row-end: 3;
+      grid-column-end: 2;
+      text-align: center;
+    }
+
+
+    .ticks path{
+      stroke: black;
+      fill: none;
+    }
+    .grid path {
+      stroke: #0003;
+      fill: none;
+    }
+
+  </style>
+</html>

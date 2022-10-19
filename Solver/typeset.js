@@ -10,6 +10,7 @@ window.MathJax = {
       eq: ["\\begin{equation} #1 \\label{#2} \\end{equation}", 2],
       dpar: ["\\cfrac{\\partial #1}{\\partial #2}", 2],
       hl: ["{\\color{WildStrawberry} #1}", 1],
+      tx: ["\\text{#1}", 1],
       red: ["{\\color{BrickRed} {#1}_1}", 1],
       blue: ["{\\color{RoyalBlue} {#1}_2}", 1],
     },

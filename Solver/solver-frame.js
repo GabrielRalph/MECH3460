@@ -1,5 +1,7 @@
 import {SvgPlus} from "../SvgPlus/4.js"
 import {loadTypeset, typeset} from "./typeset.js"
+import {} from "./Plots/plots.js"
+
 
 class PlotImage extends SvgPlus {
   onconnect(){
@@ -46,32 +48,47 @@ class PlotImage extends SvgPlus {
 
 const DEFUALT_SCOPE = {
   cos: Math.cos,
+  acos: Math.acos,
   sin: Math.sin,
   tan: Math.tan,
+  atan: Math.atan,
   sqrt: Math.sqrt,
   pow: Math.pow,
   abs: Math.abs,
+  pi: Math.PI,
 }
 
 function solveValue(value, mainScope) {
-  if (value instanceof Function) {
-    return value;
-  }
 
-  let scopeNames = [];
-  let scopeValues = [];
-  for (let scope of [DEFUALT_SCOPE, mainScope]) {
-    for (let name in scope) {
-      scopeNames.push(name);
-      scopeValues.push(scope[name]);
+  if (typeof value === "string") {
+    let scopeNames = [];
+    let scopeValues = [];
+    for (let scope of [DEFUALT_SCOPE, mainScope]) {
+      for (let name in scope) {
+        scopeNames.push(name);
+        scopeValues.push(scope[name]);
+      }
     }
+    scopeNames.push(`"use strict";return (${value})`);
+    let soln = NaN;
+    try {
+      soln = Function.apply(null, scopeNames).apply(null, scopeValues);
+    }catch(e) {}
+    value = soln;
   }
-  scopeNames.push(`"use strict";return (${value})`);
-  let soln = NaN;
-  try {
-    soln = Function.apply(null, scopeNames).apply(null, scopeValues);
-  }catch(e) {}
-  return soln;
+  return value;
+}
+
+function resizeInput(input) {
+  if (input instanceof HTMLInputElement) {
+    let sc0 = input.scrollWidth;
+    input.setAttribute("style", "width: 0");
+    window.requestAnimationFrame(() => {
+      let sc1 = input.scrollWidth;
+      // console.log(sc0, sc1);
+      input.setAttribute("style", `width: ${sc1}px`);
+    })
+  }
 }
 
 class SolverFrame extends SvgPlus {
@@ -129,7 +146,9 @@ class SolverFrame extends SvgPlus {
   init_inputs(){
     let inputs = this.querySelectorAll(".variable");
     for (let input of inputs) {
+      resizeInput(input);
       input.oninput = () => {
+        resizeInput(input);
         this.solveUpdate();
       }
     }
@@ -159,7 +178,9 @@ class SolverFrame extends SvgPlus {
     let scope = this.scope;
     console.log("%c\t\tvariables computed", "color: lime;");
 
-
+    try {
+      this.render_outputs(scope);
+    } catch(e) {}
     for (let solverMethod of this._solver_methods) {
       solverMethod(scope);
     }
@@ -175,8 +196,13 @@ class SolverFrame extends SvgPlus {
     let outputs = this.querySelectorAll("output");
     for (let output of outputs) {
       let html = output.template;
-      html = html.replace(/~(\d+)?{([^}]+)}/g, (m, dp, ph) => {
+      html = html.replace(/~(\d+)?(\[\w+\])?{([^}]+)}/g, (m, dp, varn, ph) => {
         let value = solveValue(ph, scope);
+        if (typeof varn === "string" && varn !== "") {
+          let vname = varn.match(/\[(\w+)\]/)[1];
+          if (vname) scope[vname] = value;
+        }
+
         if (!dp) dp = 1;
         let res = "" + Math.round(value * Math.pow(10, dp))/Math.pow(10, dp);
         return res;
@@ -184,6 +210,15 @@ class SolverFrame extends SvgPlus {
       output.innerHTML = html;
     }
     typeset(outputs);
+
+    let plots = this.querySelectorAll("svg-plot");
+    for (let plot of plots) try{
+      plot.render();
+      plot.clear();
+    }catch(e){
+      console.log(e);
+    }
+    typeset(plots);
   }
 }
 

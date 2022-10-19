@@ -11,23 +11,30 @@
       title = "My Crazy Plot"
       plot-size = "500, 200"
       font-size = "10"
-      axis-start = "52, 0"
-      axis-end = "312, 130"
+      axis-start = "-5, 0"
+      axis-end = "5, 10"
       x-label = "Current (mA)"
       y-label = "Voltage (V)"
+      grid-on
+      <!-- legend-on -->
       ></svg-plot>
+
       $\red{hello}$
   </body>
   <script type = "module">
     let plot = document.querySelector("svg-plot");
-    plot.addSignal([[70, 10], [200, 50]], "a")
+    let line = [];
+    let line2 = [];
+    for (let x = -5; x < 5; x+=0.1) {
+      line.push([x, x*x]);
+      line2.push([x, 2 + 2 *Math.sin(x)])
+    }
+    plot.line("parobola", line);
+    plot.line("wave", line2);
+    plot.render();
   </script>
   <style>
-    .signals path {
-      stroke: black;
-      fill: none;
-      stroke-endcap: round;
-    }
+
     svg-plot {
       display: grid;
       grid-template-columns: 1.5em;
@@ -39,32 +46,55 @@
       grid-column-end: 3;
       text-align: center;
       font-size: 1.5em;
+      margin-bottom: 0.5em;
     }
-
-    svg-plot svg{
-      grid-row-start: 2;
-      grid-column-start: 2;
-      grid-row-end: 2;
-      grid-column-end: 2;
-    }
-    .y-label {
+    svg-plot .legend {
       grid-row-start: 2;
       grid-column-start: 1;
       grid-row-end: 2;
+      grid-column-end: 3;
+      display: flex;
+      justify-content: center;
+      gap: 1.5em;
+    }
+    svg-plot .legend-icon {
+      display: flex;
+      gap: 0.5em;
+      align-items: center;
+    }
+        svg-plot .legend-icon svg {
+        height: 1em;
+      }
+
+    svg-plot svg{
+      grid-row-start: 3;
+      grid-column-start: 2;
+      grid-row-end: 3;
+      grid-column-end: 2;
+    }
+    svg-plot .y-label {
+      grid-row-start: 3;
+      grid-column-start: 1;
+      grid-row-end: 3;
       grid-column-end: 1;
       text-align: center;
       writing-mode: vertical-rl;
       text-orientation: mixed;
     }
-    .x-label {
-      grid-row-start: 3;
+    svg-plot .x-label {
+      grid-row-start: 4;
       grid-column-start: 2;
-      grid-row-end: 3;
+      grid-row-end: 4;
       grid-column-end: 2;
       text-align: center;
     }
 
 
+    svg-plot svg path {
+      stroke: black;
+      fill: none;
+      stroke-linecap: round;
+    }
     .ticks path{
       stroke: black;
       fill: none;
@@ -74,5 +104,14 @@
       fill: none;
     }
 
+  </style>
+
+  <style>
+    .parobola {
+      stroke: red;
+    }
+    .wave {
+      stroke: green;
+    }
   </style>
 </html>

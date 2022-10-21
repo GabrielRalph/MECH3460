@@ -39,7 +39,7 @@ export async function loadTypeset(){
   script.type = "text/javascript";
   return new Promise(function(resolve, reject) {
     script.onload = () => {
-      console.log(MathJax);
+      // console.log(MathJax);
       resolve()
     }
     script.src  = "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"

@@ -81,19 +81,49 @@ classdef PlotImage
         % Plot signal points
         function plot(obj)
             sigs = obj.pixelpoints;
-%             imshow(obj.image);
-            x = (1:obj.width)';
-            hold on;
-            plot(x, sigs, 'LineWidth',3);
-        end
+            imshow(obj.image);
+            [~, ns] = size(sigs);
+%             for i = 1:ns
+                x = (1:obj.width)';
+                hold on;
+                plot(x, sigs);
 
-        function saveJSON(obj, filename, imgsrc)
-            fid = fopen(filename, "w+");
-            obj.imgsrc = imgsrc;
-            text = jsonencode(obj);
-            fprintf(fid, "%s\n", text);
-            fclose(fid);
+%             end
+
         end
+        
+%         % Infer y from x, for all signals returns the average y
+%         % coordinate for points whose x coordinates were no  
+%         % more the minimum x increment away from the given x value to 
+%         % infer y from.
+%         function y = yinfer(obj, x)
+%             sigs = obj.signalpoints;
+%             n = length(x);
+%             y = zeros(length(sigs), n);
+%             for i = 1:length(sigs)
+%                 points = sigs{i};
+%                 for j = 1:n
+%                     ipoints = points(abs(points(:, 1) - x(j)) < obj.incs(1), :);
+%                     center = mean(ipoints);
+%                     y(i, j) = center(2);
+%                 end
+%             end
+%         end
+%     
+%         % Infer x from y
+%         function x = xinfer(obj, y)
+%             sigs = obj.signalpoints;
+%             n = length(y);
+%             x = zeros(length(sigs), n);
+%             for i = 1:length(sigs)
+%                 points = sigs{i};
+%                 for j = 1:n
+%                     ipoints = points(abs(points(:, 2) - y(j)) < obj.incs(2), :);
+%                     center = mean(ipoints);
+%                     x(i, j) = center(1);
+%                 end
+%             end
+%         end
     end
 end
 

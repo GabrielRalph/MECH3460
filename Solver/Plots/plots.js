@@ -50,6 +50,9 @@ styles.innerHTML = `
     writing-mode: vertical-rl;
     text-orientation: mixed;
   }
+  svg-plot .y-label mjx-math mjx-c::before {
+    padding: 0 !important;
+  }
   svg-plot .x-label {
     grid-row-start: 4;
     grid-column-start: 2;

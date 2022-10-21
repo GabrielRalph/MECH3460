@@ -1,50 +1,7 @@
 import {SvgPlus} from "../SvgPlus/4.js"
 import {loadTypeset, typeset} from "./typeset.js"
+import {} from "./PlotImageData/plot-image.js"
 import {} from "./Plots/plots.js"
-
-
-class PlotImage extends SvgPlus {
-  onconnect(){
-    let src = this.getAttribute("src");
-    this.value = ()=>NaN;
-    this.loading = this.load(src);
-  }
-
-  async load(src){
-    if (this.loading instanceof Promise) {
-      return await this.loading;
-    }
-
-    console.log("%cloading plot...", "color: yellow;");
-    let data = await fetch(src);
-    let json = await data.json();
-    let {width, height, imgsrc, pixelstart, pixelend, pixelpoints, rangestart, rangeend} = json;
-
-    let svg = this.createChild("svg", {viewBox: `0 0 ${width} ${height}`});
-    let image = svg.createChild("image", {href: imgsrc, x: 0, y: 0, width: width, height: height});
-    let pp = svg.createChild("g");
-
-    this.value = (rx) => {
-      let px = pixelstart[0] + (rx - rangestart[0]) * (pixelend[0] - pixelstart[0]) / (rangeend[0] - rangestart[0]);
-      px =  Math.round(px);
-      let y = NaN;
-      if (px in pixelpoints) {
-        let py = pixelpoints[px];
-        if (py !== null) {
-          pp.innerHTML = "";
-          pp.createChild("path", {stroke: "red", fill: "none", d: `M${px},${pixelstart[1]}L${px},${py}L${pixelstart[0]},${py}`})
-          pp.createChild("circle", {fill: "red", r: 3, cx: px, cy: py});
-          // console.log(py, rangestart, rangeend, pixelstart, pixelend);
-          y = rangestart[1] + (py - pixelstart[1]) * (rangeend[1] - rangestart[1]) / (pixelend[1] - pixelstart[1]);
-        }
-      }
-
-      return y;
-    }
-    console.log("%c\t\tplot loaded", "color: yellow;");
-    this.loading = null;
-  }
-}
 
 const DEFUALT_SCOPE = {
   cos: Math.cos,
@@ -58,25 +15,50 @@ const DEFUALT_SCOPE = {
   pi: Math.PI,
 }
 
-function solveValue(value, mainScope) {
-
-  if (typeof value === "string") {
-    let scopeNames = [];
-    let scopeValues = [];
-    for (let scope of [DEFUALT_SCOPE, mainScope]) {
-      for (let name in scope) {
-        scopeNames.push(name);
-        scopeValues.push(scope[name]);
-      }
+function getScopeNameValues(scope) {
+  let scopeNames = [];
+  let scopeValues = [];
+  for (let s of [DEFUALT_SCOPE, scope]) {
+    for (let name in s) {
+      scopeNames.push(name);
+      scopeValues.push(s[name]);
     }
+  }
+  return [scopeNames, scopeValues]
+}
+
+function solveValue(value, scope) {
+  if (typeof value === "string") {
+    let [scopeNames, scopeValues] = getScopeNameValues(scope)
     scopeNames.push(`"use strict";return (${value})`);
     let soln = NaN;
     try {
       soln = Function.apply(null, scopeNames).apply(null, scopeValues);
-    }catch(e) {}
+    }catch(e) {
+      console.log("expression error " + value);
+    }
     value = soln;
   }
   return value;
+}
+
+function solveScript(script, scope) {
+  let [scopeNames, scopeValues] = getScopeNameValues(scope);
+
+  let soln = {};
+  scopeNames.push(`"use strict"; ${script}`);
+  try {
+    soln = Function.apply(null, scopeNames).apply(null, scopeValues);
+  } catch(e) {
+    console.log("script error");
+    console.log(e);
+  }
+
+  if (typeof soln === "object" && soln !== null) {
+    for (let key in soln) {
+      scope[key] = soln[key];
+    }
+  }
 }
 
 function resizeInput(input) {
@@ -93,24 +75,16 @@ function resizeInput(input) {
 
 class SolverFrame extends SvgPlus {
   onconnect(){
-    this._solver_methods = [];
     this.loading = this.init();
-    this.solveUpdate();
+    // this.solveUpdate();
   }
 
-  addSolverMethod(func) {
-    if (func instanceof Function) {
-      this._solver_methods.push(func);
-    }
-    this.solveUpdate();
-  }
-
+  // Initialisation methods
   async init(){
     if (this.loading instanceof Promise) {
       return await this.loading;
     }
     console.log("%cinitialising...", "color: #1cdbfa;");
-
 
     this.init_outputs();
     console.log("%c\t\tinit outputs", "color: #1cdbfa;");
@@ -126,6 +100,7 @@ class SolverFrame extends SvgPlus {
     await loadTypeset();
     console.log("%c\t\tMathJax loaded", "color: #1cdbfa;");
 
+    this.solveUpdate();
     this.loading = false;
   }
 
@@ -155,17 +130,75 @@ class SolverFrame extends SvgPlus {
   }
 
 
+
   get scope(){
-    let variables = {};
-    let inputs = this.querySelectorAll(".variable");
-    for (let input of inputs) {
-      let name = input.getAttribute("name");
-      if (name !== null && name !== "") {
-        variables[name] = solveValue(input.value, variables)
+    let scope = {};
+    let elements = this.querySelectorAll(".variable, output, script");
+    for (let i = 0; i < 2; i++) {
+      this.clear_plots();
+      for (let el of elements) {
+        let tag = el.tagName.toLowerCase();
+        switch (tag) {
+          case "output":
+          this.get_output(el, scope);
+          break;
+          case "script":
+          this.get_script(el, scope);
+          break;
+          default:
+          this.get_variable(el, scope);
+          break;
+        }
       }
     }
-    return variables;
+    return scope;
   }
+
+  get_variable(variable, scope) {
+    let name = variable.getAttribute("name");
+    if (name !== null && name !== "") {
+      scope[name] = solveValue(variable.value, scope)
+    }
+  }
+
+  get_output(output, scope) {
+    let html = output.template;
+    html = html.replace(/~(\d+)?(\[\w+\])?{([^}]+)}/g, (m, dp, varn, ph) => {
+      let value = solveValue(ph, scope);
+      if (typeof varn === "string" && varn !== "") {
+        let vname = varn.match(/\[(\w+)\]/)[1];
+        if (vname) scope[vname] = value;
+      }
+      if (!dp) dp = 1;
+      let res = "" + Math.round(value * Math.pow(10, dp))/Math.pow(10, dp);
+      return res;
+    });
+    output.innerHTML = html;
+  }
+
+  get_script(script, scope) {
+    solveScript(script.innerHTML, scope);
+  }
+
+
+  clear_plots(){
+    let plots = document.querySelectorAll("svg-plot");
+    for (let plot of plots) {
+      plot.clear();
+    }
+  }
+  render_plots(){
+    let plots = document.querySelectorAll("svg-plot");
+    for (let plot of plots) {
+      try {
+        plot.render();
+        plot.clear();
+      } catch (e) {
+
+      }
+    }
+  }
+
 
   async solveUpdate(){
     if (this.loading instanceof Promise) {
@@ -178,49 +211,11 @@ class SolverFrame extends SvgPlus {
     let scope = this.scope;
     console.log("%c\t\tvariables computed", "color: lime;");
 
-    try {
-      this.render_outputs(scope);
-    } catch(e) {}
-    for (let solverMethod of this._solver_methods) {
-      solverMethod(scope);
-    }
-    console.log("%c\t\tsolver methods run", "color: lime;");
-
-
-    this.render_outputs(scope);
-    console.log("%c\t\toutput rendered", "color: lime;");
+    this.render_plots();
+    console.log("%c\t\tplots rendered", "color: lime;");
     this.waiting = false;
   }
 
-  render_outputs(scope) {
-    let outputs = this.querySelectorAll("output");
-    for (let output of outputs) {
-      let html = output.template;
-      html = html.replace(/~(\d+)?(\[\w+\])?{([^}]+)}/g, (m, dp, varn, ph) => {
-        let value = solveValue(ph, scope);
-        if (typeof varn === "string" && varn !== "") {
-          let vname = varn.match(/\[(\w+)\]/)[1];
-          if (vname) scope[vname] = value;
-        }
-
-        if (!dp) dp = 1;
-        let res = "" + Math.round(value * Math.pow(10, dp))/Math.pow(10, dp);
-        return res;
-      });
-      output.innerHTML = html;
-    }
-    typeset(outputs);
-
-    let plots = this.querySelectorAll("svg-plot");
-    for (let plot of plots) try{
-      plot.render();
-      plot.clear();
-    }catch(e){
-      console.log(e);
-    }
-    typeset(plots);
-  }
 }
 
-SvgPlus.defineHTMLElement(PlotImage);
 SvgPlus.defineHTMLElement(SolverFrame)

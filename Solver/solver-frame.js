@@ -2,7 +2,10 @@ import {SvgPlus} from "../SvgPlus/4.js"
 import {loadTypeset, typeset} from "./typeset.js"
 import {} from "./PlotImageData/plot-image.js"
 import {} from "./Plots/plots.js"
-
+function round(num, dp) {
+  let pw = Math.pow(10, dp);
+  return Math.round(num * pw) / pw;
+}
 const DEFUALT_SCOPE = {
   cos: Math.cos,
   acos: Math.acos,
@@ -13,6 +16,7 @@ const DEFUALT_SCOPE = {
   pow: Math.pow,
   abs: Math.abs,
   pi: Math.PI,
+  round: round
 }
 
 function getScopeNameValues(scope) {
@@ -174,6 +178,7 @@ class SolverFrame extends SvgPlus {
       return res;
     });
     output.innerHTML = html;
+    typeset([output]);
   }
 
   get_script(script, scope) {
@@ -197,6 +202,7 @@ class SolverFrame extends SvgPlus {
 
       }
     }
+    typeset(plots);
   }
 
 

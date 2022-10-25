@@ -8,366 +8,605 @@
   </head>
   <body>
     <solver-frame>
+
       <!-- Problem Statement -->
       <section>
         <h1>Problem Statement</h1>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        <img src = "./fig_FBD.svg" />
+        <section>
+          <img src = "./fig0.png" />
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </section>
+
+        <!-- Execuative Summary -->
+        <section>
+          <h1>Execuative Summary</h1>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </section>
+
+        <!-- Design Parameters -->
+        <section>
+          <h1>Design parameters</h1>
+          <row-2>
+            <div>
+              <b>Design Dimensions</b>
+              <row-1>
+                <div>Pitch Circle Radius $r_p$ = </div>
+                <div><input value = "165" class = "variable" name = "rp"/> $\tx{mm}$</div>
+              </row-1>
+
+              <row-1>
+                <div>Plumber Gearbox Clearence $\tx{Clr}$ = </div>
+                <div><input value = "20" class = "variable" name = "Clr"/> $\tx{mm}$</div>
+              </row-1>
+
+              <b>Plumber Block Dimensions</b>
+              <row-1>
+                <div>Plumber Bearing Spacing $\tx{Pbs}$ = </div>
+                <div><input value = "330" class = "variable" name = "Pbs"/> $\tx{mm}$</div>
+              </row-1>
+
+              <row-1>
+                <div>Plumber Bearing Width $\tx{Pbw}$ = </div>
+                <div><input value = "110" class = "variable" name = "Pbw"/> $\tx{mm}$</div>
+              </row-1>
+
+              <b>Gearbox Dimensions</b>
+              <row-1>
+                <div>Gearbox Width $\tx{Gbw}$ = </div>
+                <div><input value = "189" class = "variable" name = "Gbw"/> $\tx{mm}$</div>
+              </row-1>
+
+              <row-1>
+                <div>Torque Arm Distance $\tx{Tad}$ = </div>
+                <div><input value = "245" class = "variable" name = "Tad"/> $\tx{mm}$</div>
+              </row-1>
+
+              <row-1>
+                <div>Gearbox CoA Distance $\tx{Gcd}$ = </div>
+                <div><input value = "65" class = "variable" name = "Gcd"/> $\tx{mm}$</div>
+              </row-1>
+
+              <row-1>
+                <div>Weight of Gearbox $m_w$ = </div>
+                <div><input value = "100" class = "variable" name = "mw"/> $\tx{kg}$</div>
+              </row-1>
+            </div>
+            <div>
+              <b>Factor of Safety</b>
+              <row-1>
+                <div>$F_S$ = </div>
+                <div><input value = "2"  class = "variable" name = "FS"/> </div>
+              </row-1>
+
+              <b>Applied Forces</b>
+
+              <row-1>
+                <div>Maximum Load Force $F_L$ = </div>
+                <div><input value = "15" class = "variable" name = "FL"/> $\tx{kN}$</div>
+              </row-1>
+              <row-1>
+                <div>Angle of Tension Leg $\phi$ = </div>
+                <div><input value = "15" class = "variable" name = "phi_deg"/>$^\circ$</div>
+              </row-1>
+              <script type = "solver">return {phi: phi_deg * pi / 180}</script>
+
+              <b>Shaft material properties</b>
+              <row-1>
+                <div>Ultimate Tensile Strength $F_U$ = </div>
+                <div><input value = "410" class = "variable" name = "FU"/> MPa</div>
+              </row-1>
+              <row-1>
+                <div>Yield Strength $F_Y$ = </div>
+                <div><input value = "230"  class = "variable" name = "FY"/> MPa</div>
+              </row-1>
+              <row-1>
+                <div>Endurance Strength $F_R$ = </div>
+                <div><input value = "FU * 0.45"  class = "variable" name = "FR"/> MPa</div>
+              </row-1>
+              <row-1>
+                <div>Young's Modulus $E$ = </div>
+                <div><input value = "90"  class = "variable" name = "E"/> $\tx{kN}/\tx{mm}^2$</div>
+              </row-1>
+              <b>Trial Diameter</b>
+              <row-1>
+                <div>$D_0$ = </div>
+                <div><input value = 65  class = "variable" name = "D0"/> mm</div>
+              </row-1>
+            </div>
+          </row-2>
+        </section>
       </section>
 
-      <!-- Execuative Summary -->
+      <!-- Shaft Design Process (15) -->
       <section>
-        <h1>Execuative Summary</h1>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      </section>
+        <h1>Shaft Design Process</h1>
 
-      <!-- Design Parameters -->
-      <section>
-        <h1>Design parameters</h1>
-        <row-2>
-          <div>
-            <b>Design Dimensions</b>
-            <row-1>
-              <div>Pitch Circle Radius $r_p$ = </div>
-              <div><input value = "165" class = "variable" name = "rp"/> $\tx{mm}$</div>
-            </row-1>
-
-            <row-1>
-              <div>Plumber Gearbox Clearence $\tx{Clr}$ = </div>
-              <div><input value = "20" class = "variable" name = "Clr"/> $\tx{mm}$</div>
-            </row-1>
-
-            <b>Plumber Block Dimensions</b>
-            <row-1>
-              <div>Plumber Bearing Spacing $\tx{Pbs}$ = </div>
-              <div><input value = "330" class = "variable" name = "Pbs"/> $\tx{mm}$</div>
-            </row-1>
-
-            <row-1>
-              <div>Plumber Bearing Width $\tx{Pbw}$ = </div>
-              <div><input value = "110" class = "variable" name = "Pbw"/> $\tx{mm}$</div>
-            </row-1>
-
-            <b>Gearbox Dimensions</b>
-            <row-1>
-              <div>Gearbox Width $\tx{Gbw}$ = </div>
-              <div><input value = "189" class = "variable" name = "Gbw"/> $\tx{mm}$</div>
-            </row-1>
-
-            <row-1>
-              <div>Torque Arm Distance $\tx{Tad}$ = </div>
-              <div><input value = "245" class = "variable" name = "Tad"/> $\tx{mm}$</div>
-            </row-1>
-
-            <row-1>
-              <div>Gearbox CoA Distance $\tx{Gcd}$ = </div>
-              <div><input value = "65" class = "variable" name = "Gcd"/> $\tx{mm}$</div>
-            </row-1>
-
-            <row-1>
-              <div>Weight of Gearbox $m_w$ = </div>
-              <div><input value = "100" class = "variable" name = "mw"/> $\tx{kg}$</div>
-            </row-1>
-          </div>
-          <div>
-            <b>Factor of Safety</b>
-            <row-1>
-              <div>$F_S$ = </div>
-              <div><input value = "2"  class = "variable" name = "FS"/> </div>
-            </row-1>
-
-            <b>Applied Forces</b>
-
-            <row-1>
-              <div>Maximum Load Force $F_L$ = </div>
-              <div><input value = "15" class = "variable" name = "FL"/> $\tx{kN}$</div>
-            </row-1>
-
-            <b>Shaft material properties</b>
-            <row-1>
-              <div>Ultimate Tensile Strength $F_U$ = </div>
-              <div><input value = "410" class = "variable" name = "FU"/> MPa</div>
-            </row-1>
-            <row-1>
-              <div>Yield Strength $F_Y$ = </div>
-              <div><input value = "230"  class = "variable" name = "FY"/> MPa</div>
-            </row-1>
-            <row-1>
-              <div>Endurance Strength $F_R$ = </div>
-              <div><input value = "FU * 0.45"  class = "variable" name = "FR"/> MPa</div>
-            </row-1>
-            <row-1>
-              <div>Young's Modulus $E$ = </div>
-              <div><input value = "90"  class = "variable" name = "E"/> $\tx{kN}/\tx{mm}^2$</div>
-            </row-1>
-
-          </div>
-        </row-2>
-      </section>
-
-      <!-- Maximum Force and Moments -->
-      <section>
-        <h1>Maximum Forces and Bending Moment</h1>
-        <row-2>
-          <div>
-            <img src = "./fig_gbfbd.svg"/>
-          </div>
-          <div>
+        <!-- Maximum Force and Moments (5) -->
+        <section>
+          <h1>Maximum Forces and Bending Moment</h1>
+          <row-2>
             <output>
-              The torqueue at the shaft was calculated to be.
+              The torqueue generated from the tension leg was calculated as.
               $$T_q = r_p F_L = ~[Tq]{rp * FL} \tx{ kN} \cdot \tx{mm}$$
-              $$\tx{Tad} T_1  + \tx{Gcd} m_w g  = Tq$$
+              As the the gearbox body does not spin, the sum of moments about the $x$ axis
+              must equal the torque caused by the tension leg $\therefore$
+              $T_q = \tx{Tad} T_1  + \tx{Gcd} m_w g$.
               $$T_1 = \cfrac{Tq - \tx{Gcd} m_w g}{\tx{Tad}} = ~2[T1]{(Tq - Gcd * mw * 9.81 * 1e-3)/(Tad)} \tx{ kN}$$
               $$F_W = T_1 + m_w g = ~2[FW]{T1 + mw * 9.81 * 1e-3} \tx{ kN}$$
-              Let $d_1 = \cfrac{2\tx{Clr} + \tx{Pbw} + \tx{Gbw}}{2} =~[d1]{(Pbw + Gbw)/2 + Clr} \tx{mm}$ the distance between the center of second plumber block and the center of the gearbox.
+              Looking at Figure 2 and taking the sum of all moments at the second plumber block (point $B$)
+              $$\sum M_z = -\tx{Pbs}R_A + \cfrac{\tx{Pbs}}{2}\cos \phi F_L - d_1F_w = 0$$
+              where $d_1 = \cfrac{2\tx{Clr} + \tx{Pbw} + \tx{Gbw}}{2} =~[d1]{(Pbw + Gbw)/2 + Clr} \tx{ mm}$.
             </output>
+            <figure>
+              <img src = "./fig_gbfbd.svg"/>
+              <figcaption>
+                FBD of Gearbox (from side)
+              </figcaption>
+            </figure>
+          </row-2>
+          <figure>
+            <img src = "./fig_FBD.svg" />
+            <figcaption>
+              FBD of Shaft (from front and side)
+            </figcaption>
+          </figure>
+
+          <output>
+            From which the vertical component of $R_A$ was found
+            $${R_A}_y  = \cfrac{1}{2}\cos \phi F_L - \cfrac{d_1}{\tx{Pbs}}F_W = ~2[RA]{0.5 * cos(phi) * FL - FW * (d1)/(Pbs)}\tx{ kN}$$
+            By taking the sum of forces in the $y$ direction
+            $${R_B}_y = F_L\cos \phi + F_W - {R_A}_y = ~2[RB]{FL * cos(phi) + FW - RA}\tx{ kN}$$
+          </output>
+
+          <figure>
+            <row-2>
+              <div>
+                <svg-plot
+                class = "variable"
+                name = "Vplot"
+                title = "Shear Force Plot"
+                x-label = "$x \tx{ (mm)}$"
+                y-label = "$v \tx{ (kN)}$"
+                plot-size = "300, 90"
+                grid-on>
+                </svg-plot>
+                <script type = "solver">
+                  let d2 = (2 * Clr + Pbw + Gbw) / 2;
+                  let FLy = FL * Math.cos(15 * Math.PI / 180);
+
+                  let py = 5;
+                  let miny = (RA - FLy);
+                  Vplot.axisStart = `-20, ${miny - py*1.25}`
+                  Vplot.axisEnd = `${d2 + Pbs + 20}, ${(RA - FLy + RB) + py}`;
+
+                  Vplot.line("shear", [[0,0],[0, RA], [Pbs/2, RA], [Pbs/2, RA - FLy], [Pbs, RA - FLy], [Pbs, RA - FLy + RB], [Pbs + d2, RA - FLy + RB], [Pbs + d2, RA - FLy + RB - FW]]);
+                </script>
+              </div>
+              <div>
+                <svg-plot
+                  class = "variable"
+                  name = "Mplot"
+                  title = "Moment Plot"
+                  x-label = "$x \tx{ (mm)}$"
+                  y-label = "$m \tx{ (kN}\cdot \tx{mm)}$"
+                  plot-size = "300, 90"
+                  grid-on>
+                </svg-plot>
+                <script type = "solver">
+                let t1 = Pbs/2;
+                let t2 = Pbs;
+                let t3 = Pbs + (Pbw + Gbw)/2 + Clr;
+
+                let ymin = null;
+                let ymax = null;
+
+                let line = [];
+                let FLy = FL * Math.cos(15 * Math.PI / 180);
+                for (let x = 0; x <= t3; x+=0.5) {
+                  let y = 0;
+                  if (x <= t1) {
+                    y = RA * x;
+                  } else if (x <= t2) {
+                    y = RA * x - FLy * (x - t1);
+                  } else if (x <= t3) {
+                    y = RA * x - FLy * (x - t1) + (x - t2) * RB;
+                  }
+                  if (ymin == null || ymin > y) ymin = y;
+                  if (ymax == null || ymax < y) ymax = y;
+                  line.push([x, y]);
+                }
+
+                Mplot.axisStart = `-20,  ${ymin - 500}`;
+                Mplot.axisEnd = `${t3 + 20}, ${ymax + 500}`;
+                Mplot.line("moment", line);
+
+                return {M_x: line}
+                </script>
+              </div>
+            </row-2>
+            <figcaption>
+              Shear Force and Moment diagrams along the shaft.
+            </figcaption>
+          </figure>
+
+          <output>
+            The maximum vertical shear force
+            $$V = {R_A}_y - F_L\cos \phi = ~2[V]{RA - FL * cos(phi)} \tx{ kN}$$
+            The moment experienced at the chain about the $z$ axis
+            $$m_q = \cfrac{\tx{Pbs}}{2}{R_A}_y = ~2[mq]{Pbs * (RA) / 2} \tx{ kN} \cdot \tx{mm}$$
+            The maximum moment about the $z$ axis was at point $B$
+            $$M_q = \cfrac{\tx{Pbs}}{2}(2{R_A}_y - F_L\cos \phi) = ~1[Mq]{(2 * RA - FL * cos(phi)) * Pbs/2} \tx{ kN} \cdot \tx{mm}$$
+          </output>
+
+          <figure style = "margin: 0 5em">
+            <img src = "./fig_FBD_zx.svg" />
+            <figcaption>
+              FBD of Shaft (from above)
+            </figcaption>
+          </figure>
+          <output>
+
+            Looking at Figure 4 and taking the sum of moments about $A$ the horizontal component of $R_B$ was found
+            $$ {R_B}_z = \frac{1}{2}F_L\sin \phi = ~[RBz]{(1/2) * FL * sin(phi)} \tx{ kN}$$
+            By taking the sum of forces in the $z$ axis we can find the horizontal component of $R_A$
+            $${R_A}_z = {R_B}_z = ~[RAz]{RBz} \tx{ kN}$$
+            In this way the maximum moment about the $y$ axis will be between points $A$ and $B$
+            $$m_y = \frac{\tx{Pbs}}{2}F_L \sin \phi = ~[my]{(Pbs/2) * FL * sin(phi)} \tx{ kN} \cdot \tx{mm}$$
+
+            Finaly the total magnitude of reaction the forces was found to be
+              $$R_A = ~[SRA]{sqrt(RA*RA + RAz*RAz)}\tx{ MPa}, \quad R_B = ~[SRA]{sqrt(RB*RB + RBz*RBz)}\tx{ MPa}$$
+
+            No axial thrust was applied and hence $P_q = ~1[Pq]{0}$
+          </output>
+        </section>
+
+        <!-- Stress raising factors -->
+        <section>
+          <h1>Stress Raising Factors</h1>
+          <div>
+            Stress raising factors were obtained from the plots in the AS1403 standards.
           </div>
-        </row-2>
-        <br />
-
-        <output>
-          Taking the sum of all moments at the second plumber block $R_1$
-          $$-\tx{Pbs}R_1 + \cfrac{\tx{Pbs}}{2}\cos 15^\circ F_L - d_1F_w = 0$$
-          $$R_1  = \cfrac{1}{2}\cos 15^\circ F_L - \cfrac{d_1}{\tx{Pbs}}F_W = ~2[R1]{0.5 * cos(15 * pi/180) * FL - FW * (d1)/(Pbs)}\tx{kN}$$
-          Taking the forces in the $y$ direction gives
-          $$ R_2 = F_L\cos 15^\circ + F_W - R_1 = ~2[R2]{FL * cos(15 * pi/180) + FW - R1}\tx{kN}$$
-        </output>
-
-        <svg-plot
-          class = "variable"
-          name = "Vplot"
-          title = "Shear Force Plot"
-          x-label = "$x \tx{ (mm)}$"
-          y-label = "$v \tx{ (kN)}$"
-          plot-size = "300, 90"
-          grid-on>
-        </svg-plot>
-        <script type = "solver">
-          let d2 = (2 * Clr + Pbw + Gbw) / 2;
-          let FLy = FL * Math.cos(15 * Math.PI / 180);
-
-          let py = 5;
-          let miny = (R1 - FLy);
-          Vplot.axisStart = `-20, ${miny - py*1.25}`
-          Vplot.axisEnd = `${d2 + Pbs + 20}, ${(R1 - FLy + R2) + py}`;
-
-          Vplot.line("shear", [[0,0],[0, R1], [Pbs/2, R1], [Pbs/2, R1 - FLy], [Pbs, R1 - FLy], [Pbs, R1 - FLy + R2], [Pbs + d2, R1 - FLy + R2], [Pbs + d2, R1 - FLy + R2 - FW]]);
-        </script>
-
-        <svg-plot
-          class = "variable"
-          name = "Mplot"
-          title = "Moment Plot"
-          x-label = "$x \tx{ (mm)}$"
-          y-label = "$m \tx{ (kN}\cdot \tx{mm)}$"
-          plot-size = "300, 90"
-          grid-on>
-        </svg-plot>
-        <script type = "solver">
-          let t1 = Pbs/2;
-          let t2 = Pbs;
-          let t3 = Pbs + (Pbw + Gbw)/2 + Clr;
-
-          let ymin = null;
-          let ymax = null;
-
-          let line = [];
-          let FLy = FL * Math.cos(15 * Math.PI / 180);
-          for (let x = 0; x <= t3; x+=0.5) {
-            let y = 0;
-            if (x <= t1) {
-              y = R1 * x;
-            } else if (x <= t2) {
-              y = R1 * x - FLy * (x - t1);
-            } else if (x <= t3) {
-              y = R1 * x - FLy * (x - t1) + (x - t2) * R2;
-            }
-            if (ymin == null || ymin > y) ymin = y;
-            if (ymax == null || ymax < y) ymax = y;
-            line.push([x, y]);
-          }
-          console.log(ymin);
-
-          Mplot.axisStart = `-20,  ${ymin - 500}`;
-          Mplot.axisEnd = `${t3 + 20}, ${ymax + 500}`;
-          Mplot.line("moment", line);
-        </script>
-
-        <output>
-          The maximum moment experienced was
-          $$M_q = \cfrac{\tx{Pbs}}{2}(2R_1 - F_L\cos 15^\circ) = ~1[Mq]{(2 * R1 - FL * cos(15 * pi / 180)) * Pbs/2} \tx{ kN} \cdot \tx{mm}$$
-          and the maximum shear force
-          $$V = R_1 - F_L\cos 15^\circ = ~2[V]{R1 - FL * cos(15 * pi / 180)} \tx{ kN}$$
-          No axial thrust was applied and hence $P_q = ~1[Pq]{0}$
-        </output>
-      </section>
-
-      <section>
-        <h1>Stress Raising Factors</h1>
-        <plot-image class = "variable" name = "Kkey_FU" src = "../Solver/PlotImageData/keyway.json">
-        </plot-image>
-        <plot-image class = "variable" name = "Kfit_FU" src = "../Solver/PlotImageData/fitted.json">
-        </plot-image>
-        <script type = "solver">
-          console.log(FU);
+          <figure>
+            <plot-image class = "variable" name = "Kkey_FU" src = "../Solver/PlotImageData/keyway.json">
+            </plot-image>
+            <figcaption>
+              Stress raising factor of keyway (auto interpolator).
+            </figcaption>
+          </figure>
+          <output>
+            Stress raising factor for the transition fitted key was found to be $K_\tx{key} = ~{Kkey}$.
+          </output>
+          <figure>
+            <plot-image class = "variable" name = "Kfit_FU" src = "../Solver/PlotImageData/fitted.json">
+            </plot-image>
+            <figcaption>
+              Stress raising factor of bearing fit (auto interpolator).
+            </figcaption>
+          </figure>
+          <script type = "solver">
           let kkeys = Kkey_FU(FU);
           let kfits = Kfit_FU(FU);
-          let k = round(kkeys[0], 2);
-          console.log(k);
           return {
-            K: k
+            Kkey: kkeys[0],
+            Kfit: kfits[0]
           };
-        </script>
+          </script>
+          <output>
+            Stress raising factor for a K8/g6 fitted bearing was found to be $K_\tx{fit} = ~{Kfit}$.
+            A final stress
+            raising factor was choosen as the maximum stress raising factor and $K = ~[K]{Kkey}$.
+          </output>
+        </section>
+
+        <!-- AS1403 Axil Diameter Selection (5) -->
+        <section>
+          <h1>AS1403 Axil Diameter Selection</h1>
+
+          <section>
+            <h1>Stress Raising Factors</h1>
+            <div>
+              To calculate the stress raising factor $K_s$ a point was taken on the plot.
+            </div>
+
+            <figure>
+              <plot-image class = "variable" name = "Ks_D" src = "../Solver/PlotImageData/Ks(D).json">
+              </plot-image>
+              <figcaption>
+                Size stress raising factor (auto interpolator).
+              </figcaption>
+            </figure>
+
+            <script type = "solver">
+            let Ks = 1;
+            if (!K) var K = 1;
+            log("K = " + K);
+            function next_D(d0) {
+              // let {Mq, Pq, Tq, FS, FR, K, Ks_D} = scope;
+              Ks = Ks_D(d0);
+              let KsK = Ks * K;
+              // console.log(Ks);
+              let d = ((1e4 * FS) / (FR)) *
+              sqrt(
+                pow(KsK * (Mq + Pq * d0 / 8000), 2) +
+                (3/16) * pow((1 + KsK) * Tq, 2)
+              );
+              return pow(d, 1/3);
+            }
+
+            let dia = null;
+            let dia0 = D0;
+            let error = 1;
+            let ittc = 0;
+            while (error > 0.001 && ittc < 10) {
+              dia = next_D(dia0);
+              error = (dia - dia0) / dia;
+              dia0 = dia;
+              ittc++;
+            }
+
+            return {
+              D1: dia,
+            }
+            </script>
+          </section>
+
+          <section>
+            <h1>Solving for Diameter</h1>
+            <output>
+              The following equation, from the AS1403-2004 rotating shaft standards $$\hat{D}^3 = \cfrac{10^4F_S}{F_R}\sqrt{\left[K_s K \left( M_q + \cfrac{P_q D}{8000}\right)\right]^2 + \cfrac{3}{16}\left[(1 + K_s K )T_q\right]^2}$$ for a shaft with more than 600 start stops and more than 900 power applied torque reversals per year
+              was used to find a better diamter $\hat{D}$ from a guess diameter $D$.
+              Itterations where continued until $\left| \cfrac{\hat{D} - D}{\hat{D}} \right| \le 0.1\%$.
+              Given the trial diameter of $D_0 = ~{D0}\text{mm}$ a final diameter of
+              $$D_1 = ~{D1}\text{mm}$$
+            </output>
+          </section>
+        </section>
+
+        <!-- ASME Ellipse Diameter Selection (5) -->
+        <section>
+          <h1>ASME Axil Diameter Selection</h1>
+          <section>
+            <h1>Maximum Stresses</h1>
+            <output>
+              The stress at the center of the shaft $\nu$ was found to be
+              $$\nu = \cfrac{VQ}{ID} = \cfrac{16 V}{3 \pi D^2} = ~[tau]{1000 * abs(16 * V / (3 * pi * pow(D2, 2)))} \tx{ MPa}$$
+              where $Q = A^\prime \hat{y}^\prime = \cfrac{\pi D^2}{8}\cdot \cfrac{2D}{3 \pi} = \cfrac{D^3}{12}$ and $I = \cfrac{\pi D2^4}{64}$
+              The maximum normal stress $\sigma_x$ experienced at the location of the maximum moment was calculated as
+              $$\sigma_x = \cfrac{M_q D/2}{I} = \cfrac{32M_q}{\pi D^3} = ~[sigma]{1000*abs(32 * Mq / (pi * pow(D2, 3)))} \tx{ MPa}$$
+              The maximum shear stress due to torsion $\tau_{xy}$ was calculated as
+              $$\tau_{xy} = \cfrac{T_q D}{2J} = \cfrac{16 T_q}{\pi D^3} = ~[phi]{1000 * 16 * Tq / (pi * pow(D2, 3))} \tx{ MPa}$$
+              The values shown above are for calculated for final derived diamter $D_2$.
+            </output>
+          </section>
+
+          <section>
+            <h1>Fatigue Strength Reducing Factors</h1>
+            <output>
+              To account for stress raising factors the fatigue strength was reduced using the following formula
+              $$F_R^\prime = C_{load} \cdot C_{size} \cdot C_{surface} \cdot C_{temp} \cdot C_{reliability} \cfrac{1}{K}F_R$$
+              <ul>
+                <li>$C_{load} = ~[Cload]{1}$ for an alternating load,</li>
+                <li>$C_{size} = ~3[Csize]{1.189 * pow(D1, -0.097)} = 1.189D^{-0.097}$ for a shaft diameter between $8$ and $250\tx{mm}$,</li>
+                <li>$C_{surface} = ~3[Csurface]{4.51 * pow(FU, -0.265)} = 4.51 F_U^{-0.265}$ for machined and cold worked surface,</li>
+                <li>$C_{temp} = ~[Ctemp]{1}$ for temperatures below $120^\circ$,</li>
+                <li>$C_{reliability} = ~3[Crel]{0.814}$ was choosen for confidence of $99\%$.</li>
+              </ul>
+              In this way reduced fatigue strength was calculated as $F_R^\prime = ~2[FRp]{Cload * Csize * Csurface * Ctemp * Crel * (1/K) * FR} \tx{ MPa}$ for $D_2$.
+            </output>
+          </section>
+
+          <section>
+            <h1>Resolving Alternating and Mean Stresses</h1>
+            <output>
+              To find the alternating $\sigma_a$ and mean $\sigma_m$ stresses two cases were considered.
+              Case 1, the shaft is not moving and holding the load on the tension leg.
+              In this way the shaft will experience no alternating stress with the normal and torsional stress contributing only to the mean stress.
+              $$\sigma_{a1} = ~[tsa1]{0}$$
+              $$\sigma_{m1} = 1000\cdot\cfrac{16}{\pi D^3}\sqrt{4M_q^2 + 3T_q^2} = ~[tsm1]{1000 * 16 * sqrt(4 * Mq * Mq + 3 * Tq * Tq) / (pi * pow(D2, 3))} \tx{ MPa}$$
+
+              Case 2, the shaft is rotating with the load.
+              In this case the normal stress will alternate between compression and tension as the shaft spins. The torsional stress will remain constant and
+              hence will contribute to the mean stress.
+              $$\sigma_{a2} = 1000\cdot \cfrac{32 M_q}{\pi D^3} = ~[tsa2]{abs(1000 * 32 * Mq / (pi * pow(D2, 3)))} \tx{ MPa}$$
+              $$\sigma_{m2} = 1000\cdot \sqrt{3}\cfrac{16T_q}{\pi D^3} = ~[tsm2]{abs(1000 * sqrt(3) * 16 * Tq / (pi * pow(D2, 3)))} \tx{ MPa}$$
+              Values where obtained for the trial diamter $D_0$.
+            </output>
+          </section>
+
+          <section>
+            <h1>Solving for Diameter</h1>
+            <div>
+              The ASME Fatigue ellipse can be represented in the paramteric form
+              $$\sigma_m = \cfrac{F_Y}{F_S}\cos \theta, \quad \sigma_a = \cfrac{F_R^\prime}{F_S} \sin \theta$$
+              and can be seen in Figure 8 for $0 \le \theta \le \pi$.
+            </div>
+            <figure>
+              <svg-plot
+                class = "variable"
+                name = "GL_plot"
+                title = "ASME Fatigue Plot"
+                y-label = "$\sigma_a \tx{ (MPa)}$"
+                x-label = "$\sigma_m \tx{ (MPa)}$"
+                grid-on>
+              </svg-plot>
+              <script type = "solver">
+                let sm1 = (1000 * 16 / (pi * pow(D2, 3))) * sqrt(4 * Mq * Mq + 3 * Tq * Tq);
+                let sa1 = 0;
+
+                let sa2 = 1000 * 32 * abs(Mq) / (pi * pow(D2, 3));
+                let sm2 = 1000 * abs(Tq) * sqrt(3) * 16 / (pi * pow(D2, 3))
+
+                log(sa2 + " x " + sm2)
+                let line = [];
+                let a = (FY / FS);
+                let b = FRp / FS;
+                for (let theta = 0; theta < pi/2; theta+=0.01) {
+                  let x = cos(theta) * a;
+                  let y = sin(theta) * b;
+                  line.push([x, y]);
+                }
+
+                let ex = (FY / FS) + 20;
+                let ey = (FRp / FS) + 20;
+                let sx = 300;
+                let sy = ey * sx / ex;
+
+                let th1 = atan(a * sa1/(sm1 * b));
+                let th2 = atan(a * sa2/(sm2 * b));
+                let dx1 = cos(th1) * a - sm1;
+                let dy1 = sin(th1) * b - sa1;
+                let dx2 = cos(th2) * a - sm2;
+                let dy2 = sin(th2) * b - sa2;
+                let del1 = sqrt(pow(dx1, 2) + pow(dy1, 2));
+                let del2 = sqrt(pow(dx2, 2) + pow(dy2, 2));
+
+                GL_plot.axisStart = "0, 0"
+                GL_plot.axisEnd = `${ex}, ${ey}`
+                GL_plot.size = `${sx}, ${sy}`
+                GL_plot.line("ASME Ellipse", line);
+                GL_plot.scatter("shaft-stress-1", [[sm1, sa1]], 2, "blue");
+                GL_plot.scatter("shaft-stress-2", [[sm2, sa2]], 2, "blue");
+                // GL_plot.scatter("", [[cos(th1), sa2]], 2, "blue");
+                // GL_plot.line("", [[cos(th1)*a, sin(th1)*b], [sm1, sa1]]);
+                GL_plot.scatter("", [[cos(th1)*a, sin(th1)*b]], 1.5, "#0005");
+                // GL_plot.line("", [[cos(th2)*a, sin(th2)*b], [sm2, sa2]]);
+                GL_plot.scatter("", [[cos(th2)*a, sin(th2)*b]], 1.5, "#0005");
+
+
+                return {
+                  delta1: del1,
+                  delta2: del2
+                }
+              </script>
+              <figcaption>
+                ASME Ellipse Plot
+              </figcaption>
+            </figure>
+            <output>
+              It was seen that the case 2 stress point was always the first
+              to exceed the range of the ASME ellipse. Consider the second shaft stress point $(\sigma_{m2}, \ \sigma_{a2})$,
+              if it were to lie on the ellipse then $\sigma_{a2} = \sigma_{a}$ from which
+              $$\cfrac{1000\cdot 32 F_S M_q }{\pi F_R^\prime \sin \theta} = D^3$$
+
+              The gradient of the line formed between the origin and the point  point $(\sigma_{m2}, \ \sigma_{a2})$ we can see
+              $$m_2 = \cfrac{2M_q}{\sqrt{3}T_q}$$
+              is independant of $D$ and hence a value of $\theta$ can be solved using the following relation
+              $$\theta = \tan^{-1}\left(\cfrac{F_Y 2 M_q}{F_R^\prime \sqrt{3} T_q}\right)$$
+              Finaly a value for $D$ can be derived using the following formula
+              $$D = 10\sqrt[3]{\cfrac{32 F_S M_q}{\pi F_R^\prime \sin \left[ \tan^{-1}\left(\cfrac{F_Y 2 M_q}{F_R^\prime \sqrt{3} T_q}\right)\right]}}$$
+              As the size factor $C_{size}$ used to calculate $F_R^\prime$ is dependant on the diamter, an initial value for $D$ is selected as the trial diameter $D_0$ and a value for $F_R^\prime$ is calculated.
+              A new diameter $\hat{D}$ is then computed as per the above equation. $F_R^\prime$ is then recomputed using $\hat{D}$ and process is repeated unitl $\left|\cfrac{\hat{D} - D}{\hat{D}}\right| \le 0.1\%$.
+            </output>
+            <script type = "solver">
+            let frps = Cload * Csurface * Ctemp * Crel * (1 / K) * FR;
+            function nextD(d0) {
+              let csize = 1.189 * pow(d0, -0.097);
+              let frp = frps * csize;
+
+              let theta = atan((FY * 2 * Mq) / (frp * sqrt(3) * Tq));
+              let d1 = pow(1000 * 32 * FS * Mq / (pi * frp * sin(theta)), 1/3);
+
+              return d1;
+            }
+
+            let d0 = D0;
+            let d = d0;
+            let error = 100;
+            while (abs(error) > 0.001) {
+              d = nextD(d0);
+              error = (d - d0)/d;
+              d0 = d;
+            }
+            return {
+              D2: d,
+            }
+            </script>
+            <output>
+              In this way resulting value for the diameter $$D_2 = ~{D2}\tx{ mm}$$
+            </output>
+          </section>
+        </section>
       </section>
 
-      <!-- Maximum Stresses -->
+      <!-- Shaft properties (5) -->
       <section>
-        <h1>Maximum Stresses</h1>
-        <output>
-          The stress at the center of the shaft $\nu$ was found to be
-          $$\nu = \cfrac{VQ}{ID} = \cfrac{16 V}{3 \pi D^2} = ~[tau]{1000 * abs(16 * V / (3 * pi * pow(D, 2)))} \tx{ MPa}$$
-          where $Q = A^\prime \hat{y}^\prime = \cfrac{\pi D^2}{8}\cdot \cfrac{2D}{3 \pi} = \cfrac{D^3}{12}$ and $I = \cfrac{\pi D^4}{64}$
-        </output>
-        <output>
-          The maximum normal stress $\sigma_x$ experienced at the location of the maximum moment was calculated as
-          $$\sigma_x = \cfrac{M_q D/2}{I} = \cfrac{32M_q}{\pi D^3} = ~[sigma]{1000*abs(32 * Mq / (pi * pow(D, 3)))} \tx{ MPa}$$
+        <h1>Final Shaft Selection</h1>
 
-        </output>
-        <output>
-          The maximum shear stress due to torsion $\tau_{xy}$ was calculated as
-          $$\tau_{xy} = \cfrac{T_q D}{2J} = \cfrac{16 T_q}{\pi D^3} = ~[phi]{1000 * 16 * Tq / (pi * pow(D, 3))} \tx{ MPa}$$
-        </output>
-      </section>
-
-      <!-- AS1403 Axil Diameter Selection -->
-      <section>
-        <h1>AS1403 Axil Diameter Selection</h1>
-
-        <h2>Trial Diameter</h2>
-        <div>
-          An initial trial diameter was selected.
-        </div>
         <row-1>
-          <div>$D_0$ = </div>
-          <div><input value = 25  class = "variable" name = "D0"/> mm</div>
+          <div>Selected shaft diameter $D$ = </div>
+          <div><input value = "D1" class = "variable" name = "D"/> $\tx{mm}$</div>
         </row-1>
 
-        <h2>Stress Raising Factors</h2>
-        <div>
-          To calculate the stress raising factor $K_s$ a point was taken on the plot.
-        </div>
-        <plot-image class = "variable" name = "Ks_D" src = "../Solver/PlotImageData/Ks(D).json">
-        </plot-image>
+        <!-- Shaft Length (3) -->
 
-        <script type = "solver">
-          let Ks = 1;
-          if (!K) var K = 1;
-          console.log("K = " + K);
-          function next_D(d0) {
-            // let {Mq, Pq, Tq, FS, FR, K, Ks_D} = scope;
-            Ks = Ks_D(d0);
-            let KsK = Ks * K;
-            // console.log(Ks);
-            let d = ((1e4 * FS) / (FR)) *
-                    sqrt(
-                      pow(KsK * (Mq + Pq * d0 / 8000), 2) +
-                      (3/16) * pow((1 + KsK) * Tq, 2)
-                    );
-            return pow(d, 1/3);
-          }
-
-          let dia = null;
-          let dia0 = D0;
-          let error = 1;
-          let ittc = 0;
-          while (error > 0.001 && ittc < 10) {
-            dia = next_D(dia0);
-            error = (dia - dia0) / dia;
-            dia0 = dia;
-            ittc++;
-          }
-
-          return {
-            D: dia,
-          }
-        </script>
-        <h2>Results</h2>
-        <output>
-          The following equation, from the AS1403-2004 rotating shaft standards $$\hat{D}^3 = \cfrac{10^4F_S}{F_R}\sqrt{\left[K_s K \left( M_q + \cfrac{P_q D}{8000}\right)\right]^2 + \cfrac{3}{16}\left[(1 + K_s K )T_q\right]^2}$$ for a shaft with more than 600 start stops and more than 900 power applied torque reversals per year
-          was used to find a better diamter $\hat{D}$ from a guess diameter $D$. Itterations where continued until $\left| \cfrac{\hat{D} - D}{\hat{D}} \right| \le 0.1\%$. Given a trial diameter of $D_0 = ~{D0}\text{mm}$ a final diameter of $$D = ~{D}\text{mm}$$
-        </output>
+        <!-- Shaft Material (2) -->
       </section>
 
-
-      <!-- ASME Ellipse Diameter Selection -->
+      <!-- Gearbox selection (3) -->
       <section>
-        <h1>ASME Axil Diameter Selection</h1>
-        <h2>Resolving Alternating and Mean Stresses</h2>
-        <output>
-          To find the alternating $\sigma_a$ and mean $\sigma_m$ stresses two cases were considered.
-          Case 1, the shaft is not moving and holding the load on the tension leg.
-          In this way the shaft will experience no alternating stress with the normal and torsional stress contributing only to the mean stress.
-          $$\sigma_{a1} = ~[sa1]{0}$$
-          $$\sigma_{m1} = \cfrac{16}{\pi D^3}\sqrt{4M_q^2 + 3T_q^2} = ~[sm1]{1000 * 16 * sqrt(4 * Mq * Mq + 3 * Tq * Tq) / (pi * pow(D, 3))} \tx{ MPa}$$
-
-          Case 2, the shaft is rotating with the load.
-          In this case the normal stress will alternate between compression and tension as the shaft spins. The torsional stress will remain constant and
-          hence will contribute to the mean stress.
-          $$\sigma_{a2} = \cfrac{32 M_q}{\pi D^3} = ~[sa2]{abs(1000 * 32 * Mq / (pi * pow(D, 3)))} \tx{ MPa}$$
-          $$\sigma_{m2} = \sqrt{3}\cfrac{16T_q}{\pi D^3} = ~[sm2]{abs(1000 * sqrt(3) * 16 * Tq / (pi * pow(D, 3)))} \tx{ MPa}$$
-        </output>
-
-        <svg-plot
-          class = "variable"
-          name = "GL_plot"
-          title = "ASME Fatigue Plot"
-          y-label = "$\sigma_a \tx{ (MPa)}$"
-          x-label = "$\sigma_m \tx{ (MPa)}$"
-          grid-on>
-        </svg-plot>
-        <script type = "solver">
-          let line = [];
-          for (let theta = 0; theta < Math.PI/2; theta+=0.01) {
-            let x = Math.cos(theta) * (FY / FS);
-            let y = Math.sin(theta) * (FR / FS);
-            line.push([x, y]);
-          }
-          let ex = (FY / FS) + 20;
-          let ey = (FR / FS) + 20;
-          let sx = 300;
-          let sy = ey * sx / ex;
-          GL_plot.axisStart = "0, 0"
-          GL_plot.axisEnd = `${ex}, ${ey}`
-          GL_plot.size = `${sx}, ${sy}`
-          GL_plot.line("ASME Ellipse", line);
-          GL_plot.scatter("shaft-stress-1", [[sm1, sa1]], 2, "blue")
-          GL_plot.scatter("shaft-stress-2", [[sm2, sa2]], 2, "blue")
-        </script>
+        <h1>Gearbox Selection</h1>
       </section>
 
-      <!-- Angular Deflection -->
+      <!-- Chain Sprocket Key Selection (3) -->
       <section>
-        <h2>Angular Deflection</h2>
+        <h1>Chain Sprocket Key Selection</h1>
+        <section>
+          <h1>Key Selection</h1>
+          <row-1>
+            <div>Yield strength of Key $S_y$ = </div>
+            <div><input value = "200" class = "variable" name = "Sy"/> $\tx{MPa}$</div>
+          </row-1>
+          <output>
+            The key will experience a shearing force due to the torque caused
+            by the tension leg
+            $$F_K = \cfrac{2T_q}{D} = ~[FK]{2 * Tq / D} \tx{ kN}$$
+            By distortion energy theory the shear strength of the key will be
+            $$S_{xy} = 0.577S_y = ~[Sxy]{0.577 * Sy} \tx{ MPa}$$
+            <table>
+              <tr>
+                <td>
+                  $b \times h \tx{ mm}$
+                </td>
+                <td>
+                 Min Length $\tx{ mm}$ (Shearing)
+                </td>
+                <td>
+                 Min Length $\tx{ mm}$ (Crushing)
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <!-- $b \times h$ -->
+                </td>
+                <td>
+                  $l = \cfrac{1000 \cdot F_S F_K}{b S_{xy}}$
+                </td>
+                <td>
+                  $l = \cfrac{1000 \cdot 2 F_S F_K}{h S_{y}}$
+                </td>
+              </tr>
+              <tr><td> $2 \times 2$ </td>  <td> $~{1000 * FS * FK / (2 * Sxy)}$ </td><td> $~{2000 * FS * FK / (2 * Sy)}$ </td></tr>
+              <tr><td> $5 \times 5$ </td>    <td> $~{1000 * FS * FK / (5 * Sxy)}$ </td><td> $~{2000 * FS * FK / (5 * Sy)}$ </td></tr>
+              <tr><td> $10 \times 8$ </td>  <td> $~{1000 * FS * FK / (10 * Sxy)}$ </td><td> $~{2000 * FS * FK / (8 * Sy)}$ </td></tr>
+              <tr><td> $14 \times 9$ </td>   <td> $~{1000 * FS * FK / (14 * Sxy)}$ </td><td> $~{2000 * FS * FK / (9 * Sy)}$ </td></tr>
+              <tr><td> $16 \times 10$ </td> <td> $~{1000 * FS * FK / (16 * Sxy)}$ </td><td> $~{2000 * FS * FK / (10 * Sy)}$ </td></tr>
+              <tr><td> $22 \times 14$ </td> <td> $~{1000 * FS * FK / (22 * Sxy)}$ </td><td> $~{2000 * FS * FK / (14 * Sy)}$ </td></tr>
+              <tr><td> $25 \times 14$ </td>   <td> $~{1000 * FS * FK / (25 * Sxy)}$ </td><td> $~{2000 * FS * FK / (14 * Sy)}$ </td></tr>
+            </table>
 
-        <output>
-          Although the axil will deflect due to the weight of the motor
-          this will occur in the oppisite direction to the deflection caused by
-          the chain drive. Taking second moment of inertia as $I = \cfrac{\pi D^4}{64}$ the maxmimum angular deflection at both plumber blocks calculated to be
-          $$\cfrac{dy}{dx} = \cfrac{1}{EI}\left[(R_1 - F_L)\cfrac{x^2}{2} + \frac{\tx{Pbs}}{2}x + C\right]$$
-          Taking $x = \cfrac{\tx{Pbs}}{2}$ gives
-          $$\frac{F_L \tx{Pbs}^2}{16EI} - \cfrac{F_W d_1 \tx{Pbs}}{6EI} = ~5[theta]{(FL * pow(Pbs, 2)/16 - 0*FW * d1 * Pbs / 6) * 64 / (E * pi * pow(D, 4))}$$
-        </output>
+          </output>
+        </section>
       </section>
 
-      <!-- Plumber Block Selection -->
+      <!-- Plumber Block and Bearing Selection -->
       <section>
-        <h1>Plumber Block Selection</h1>
+        <h1>Plumber Block and Bearing Selection</h1>
         <table>
           <tr>
             <td>Bearing unit</td><td>Shaft diameter $\tx{mm}$</td><td>Basic load ratings $\tx{kN}$</td><td>Fatigue load limit $\tx{kN}$</td><td>End cover</td>
           </tr>
           <tr>
-            <td>SYNT35</td><td>35</td><td>96.5</td><td>35</td>
+            <td>SYNT35</td><td>35</td><td>96.5</td><td>35</td><td>-</td>
           </tr>
           <tr>
             <td>SYNT40</td><td>40</td><td>96.5</td><td>9.8</td><td>ECY208</td>
@@ -405,6 +644,30 @@
         </table>
       </section>
 
+      <!-- Tolerancing Considerations -->
+      <section>
+        <h1>Consideration for Tolerancing</h1>
+        <section>
+          <!-- Angular Deflection -->
+          <h1>Angular Deflection</h1>
+
+          <output>
+            Although the axil will deflect due to the weight of the motor
+            this will occur in the oppisite direction to the deflection caused by
+            the chain drive. Taking second moment of inertia as $I = \cfrac{\pi D^4}{64}$ the maxmimum angular deflection at both plumber blocks calculated to be
+
+            $$\theta_{RA2} = ~3{180 * (Pbs * Pbs / 24) * (16 * RA - 5 * FL * sin(phi)) / (E * pow(D, 4) * pi * pi / 64)}$$
+            $$\theta_{RA} = M_q\cfrac{\tx{Pbs} 16}{3 \pi D^4 E} = ~3[theta_a]{(180/pi) * Mq * (16 * Pbs) / (3 * E * pi * pow(D0, 4))}^\circ$$
+            $$\theta_{RB} = 5M_q\cfrac{\tx{Pbs} 16}{3 \pi D^4 E} = ~3[theta_a]{(180/pi) * -5 * Mq * (16 * Pbs) / (3 * E * pi * pow(D0, 4))}^\circ$$
+
+
+            <!-- $$\cfrac{dy}{dx} = \cfrac{1}{EI}\left[(R_A - F_L)\cfrac{x^2}{2} + \frac{\tx{Pbs}}{2}x + C\right]$$
+            Taking $x = \cfrac{\tx{Pbs}}{2}$ gives
+            $$\frac{F_L \tx{Pbs}^2}{16EI} - \cfrac{F_W d_1 \tx{Pbs}}{6EI} = ~5[theta]{(FL * pow(Pbs, 2)/16 - 0*FW * d1 * Pbs / 6) * 64 / (E * pi * pow(D, 4))}$$ -->
+          </output>
+        </section>
+      </section>
+
       <!-- References -->
       <section>
         <h1>References</h1>
@@ -416,16 +679,45 @@
     </solver-frame>
   </body>
 
-  <!-- <script type = "module">
-    // import {} from "../Solver/solver-frame.js"
-    let solver = document.querySelector("solver-frame");
-    function pow(num, p) {return Math.pow(num, p);}
-    function sqrt(num, p) {return Math.sqrt(num, p);}
-
-
-  </script> -->
 
   <style>
+  body {
+    display: flex;
+    font-family: "Supreme LL TT";
+    font-weight: 300;
+    flex-direction: column;
+    font-size: var(--fs);
+    margin: 3em;
+    counter-reset: figure;
+  }
+
+  :root {
+    --fs: calc(0.9vmax + 0.9vmin);
+    --h1-fs: 2.7em;
+  }
+
+  section > section:first-of-type > h1 {
+    margin-top: 0;
+  }
+
+  figure{
+    display: flex;
+    flex-direction: column;
+  }
+  figure {
+    gap: 0.7em;
+    margin: calc(var(--fs) * 3) 0;
+    counter-increment: figure;
+  }
+  figure figcaption {
+    text-align: center;
+    font-size: 0.8em;
+    font-style: italic;
+  }
+  figure figcaption::before {
+    content: "Figure " counter(figure) ": ";
+  }
+
   .shear {
     stroke: #1effd5;
     filter: url(#glow);
@@ -437,6 +729,7 @@
     stroke-linejoin: round;
 
   }
+
   input.variable  {
     font: inherit;
     display: inline;
@@ -447,30 +740,48 @@
     margin: 0; */
   }
   table {width: 100%;}
+  img {
+    width: 100%;
+  }
 
-    body {
-      display: flex;
-      font-family: "Supreme LL TT";
-      font-weight: 300;
-      flex-direction: column;
-      font-size: calc(0.9vmax + 0.9vmin);
-      margin: 6em;
-      --length: 3;
-    }
-    img {
-      width: 100%;
-    }
-    h1 {
-      font-size: 2em;
-    }
-    h2 {
-      margin-bottom: 0.5em;
-      /* font-weight: 300; */
-      /* text-align: center;; */
-    }
+  section *[hidden] {
+    display: none;
+  }
+  section[collapsed] h1::after {
+    content: " ▼";
+    float: right;
+  }
+
+
+
+  section h1 {
+    font-size: var(--h1-fs);
+    margin-top: calc(var(--fs) * 3);
+    margin-bottom: calc(var(--fs) * 0.5);
+    cursor: pointer;
+  }
+
+  section section {
+    --h1-fs: 1.7em;
+  }
+  section section section {
+    --h1-fs: 1.3em;
+  }
+
+  table {
+    border-collapse: collapse;
+  }
+  table td {
+    border: 1px solid black;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+
     row-2 {
       display: flex;
       width: 100%;
+      gap: 0.5em;
       justify-content: space-between;
     }
     row-2 > * {
@@ -483,6 +794,16 @@
       align-items: center;
       min-height: 3em;
     }
+
+    row-2 svg-plot {
+      font-size: 0.7em;
+    }
+    svg-plot {
+      font-size: 0.9em;
+
+      /* margin: 2.5em 0 0.7em 0; */
+    }
+
     plot-image {
       display: flex;
       justify-content: center;
@@ -494,9 +815,6 @@
 
     output {
       display: block;
-    }
-    svg-plot {
-      margin-bottom: 1.5em;
     }
   </style>
 </html>

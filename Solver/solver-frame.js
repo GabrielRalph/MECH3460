@@ -2,16 +2,53 @@ import {SvgPlus} from "../SvgPlus/4.js"
 import {loadTypeset, typeset} from "./typeset.js"
 import {} from "./PlotImageData/plot-image.js"
 import {} from "./Plots/plots.js"
-function round(num, dp) {
+function round(num, dp = 0) {
   let pw = Math.pow(10, dp);
   return Math.round(num * pw) / pw;
+}
+
+function selectTableColumns(table, selectedColums) {
+  let ntable = [];
+  for (let row of table) {
+    let nrow = [];
+    for (let i of selectedColums) {
+      nrow.push(row[i])
+    }
+    ntable.push(nrow);
+  }
+  return ntable;
+}
+function table2HTMLRows(table, format) {
+  // console.log(table);
+  console.log(format);
+  let html = "";
+  let i = 0;
+  for (let row of table) {
+    let j = 0;
+    let hrow = ""
+    for (let col of row) {
+      if (format && format[i] && format[i][j])
+        hrow += `<td class = "${format[i][j]}">${col}</td>`;
+      else
+        hrow += `<td>${col}</td>`;
+
+      j++;
+    }
+    html += `<tr>${hrow}</tr>`;
+    i++;
+  }
+  // console.log(html);
+  return html;
 }
 
 function addCollapseHandlers(element) {
   let headers = element.querySelectorAll("section > h1");
   for (let header of headers) {
     let section = header.parentNode;
-    header.ondblclick = () => {
+    header.onclick = () => {
+      toggleCollapsed(header);
+    }
+    if (!section.querySelector("section")) {
       toggleCollapsed(header);
     }
   }
@@ -21,19 +58,9 @@ function toggleCollapsed(header) {
   let section = header.parentNode;
   let collapsed = section.getAttribute("collapsed") !== null;
   let collapse = !collapsed;
-
   section.toggleAttribute("collapsed", collapse);
-  for (let child of section.childNodes) {
-    if (child instanceof Text) {
-      let div = new SvgPlus("div");
-      section.replaceChild(div, child);
-      div.appendChild(child);
-      child = div;
-    }
-    console.log();
-    if (!(child instanceof Comment || header.isSameNode(child))){
-      child.toggleAttribute("hidden", collapse);
-    }
+  for (let input of section.querySelectorAll("input.variable")) {
+    resizeInput(input);
   }
 }
 
@@ -51,6 +78,8 @@ function log(text, mode, indent = 1) {
   console.log(`%c${text}`, `color: ${LOG_MODES[mode]}`);
 }
 
+
+
 const DEFUALT_SCOPE = {
   cos: Math.cos,
   acos: Math.acos,
@@ -62,6 +91,10 @@ const DEFUALT_SCOPE = {
   abs: Math.abs,
   pi: Math.PI,
   round: round,
+  min: (x, y) => x < y ? x : y,
+  max: (x, y) => x > y ? x : y,
+  selectTableColumns: selectTableColumns,
+  table2HTMLRows: table2HTMLRows,
   log: (txt) => log(txt, "user", 1),
 }
 
@@ -101,7 +134,7 @@ function solveScript(script, scope) {
   try {
     soln = Function.apply(null, scopeNames).apply(null, scopeValues);
   } catch(e) {
-    log(`expression error\n${e}`, "error", 1);
+    log(`script error\n${e}`, "error", 1);
   }
 
   if (typeof soln === "object" && soln !== null) {
@@ -117,6 +150,7 @@ function resizeInput(input) {
     input.setAttribute("style", "width: 0");
     window.requestAnimationFrame(() => {
       let sc1 = input.scrollWidth;
+      sc1 = sc1 < 10 ? 10 : sc1;
       // console.log(sc0, sc1);
       input.setAttribute("style", `width: ${sc1}px`);
     })
@@ -209,19 +243,24 @@ class SolverFrame extends SvgPlus {
   get_variable(variable, scope) {
     let name = variable.getAttribute("name");
     if (name !== null && name !== "") {
-      scope[name] = solveValue(variable.value, scope)
+      let value = variable.value;
+      if (variable.tagName === "TBODY") value = variable;
+      scope[name] = solveValue(value, scope)
     }
   }
   get_output(output, scope, ts) {
     let html = output.template;
-    html = html.replace(/~(\d+)?(\[\w+\])?{([^}]+)}/g, (m, dp, varn, ph) => {
+    html = html.replace(/(?:<!--\s*)?~(\d+)?(\[\w+\])?{([^}]+)}(?:\s*-->)?/g, (m, dp, varn, ph) => {
       let value = solveValue(ph, scope);
       if (typeof varn === "string" && varn !== "") {
         let vname = varn.match(/\[(\w+)\]/)[1];
         if (vname) scope[vname] = value;
       }
-      if (!dp) dp = 1;
-      let res = "" + Math.round(value * Math.pow(10, dp))/Math.pow(10, dp);
+      let res = value;
+      if (typeof value === "number") {
+        if (!dp) dp = 1;
+        res = "" + Math.round(value * Math.pow(10, dp))/Math.pow(10, dp);
+      }
       return res;
     });
     output.innerHTML = html;

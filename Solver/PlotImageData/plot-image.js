@@ -11,17 +11,15 @@ const COLOURS = [
 
 class PlotImage extends SvgPlus {
   onconnect(){
-    let src = this.getAttribute("src");
-    this.value = ()=>NaN;
-    this.loading = this.load(src);
+    this.value = () => NaN;
   }
 
 
-  async load(src){
+  async load(){
     if (this.loading instanceof Promise) {
       return await this.loading;
     }
-
+    let src = this.getAttribute("src");
     let data = await fetch(src);
     let json = await data.json();
     let {width, height, imgsrc, pixelstart, pixelend, pixelpoints, rangestart, rangeend} = json;
@@ -67,6 +65,8 @@ class PlotImage extends SvgPlus {
     console.log("%c\t\tplot loaded", "color: yellow;");
     this.loading = null;
   }
+
+  // static get obserevedAttributes() {return ["src"]}
 }
 
 SvgPlus.defineHTMLElement(PlotImage);

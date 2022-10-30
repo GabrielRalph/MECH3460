@@ -3,34 +3,25 @@
 % ox = 0;
 % ex = 250;
 % ey = 1.8;
+clc;
+clear;
+clf;
+pimg = imread("Kstep.png");
+pDimg = imread("DvsKs.png");
+plotim = PlotImage(pimg, [0, 1], [200, 1.8]);
+plotim.plot()
 
-pd = extract_poly(imread("DrvsDelta2.png"), 1, 0, 2, 0.16, 3);
-
-function p = extract_poly(plotimg, ox, oy, ex, ey, d)
-    red = plotimg(:, :, 1) > 0.8 & plotimg(:, :, 2) < 0.3 & plotimg(:, :, 3) < 0.3;
-    blue = plotimg(:, :, 1) < 0.3 & plotimg(:, :, 2) < 0.3 & plotimg(:, :, 3) > 0.8;
-    green = plotimg(:, :, 1) < 0.3 & plotimg(:, :, 2) > 0.8 & plotimg(:, :, 3) < 0.3;
-
-    [h, ~] = size(red);
-    pidxs = find(red);
-    y = mod(pidxs - 1, h) + 1;
-    x = floor(pidxs / h);
-
-    pidxs = find(blue);
-    oyi = mod(pidxs - 1, h) + 1;
-    oxi = floor(pidxs / h);
-
-    pidxs = find(green);
-    eyi = mod(pidxs - 1, h) + 1;
-    exi = floor(pidxs / h);
-
-    x = ox + (ex - ox) * (x - oxi) / (exi - oxi);
-    y = oy + (ey - oy) * (y - oyi) / (eyi - oyi);
-    p = polyfit(x, y, 8);
-
-    x1 = linspace(min(x), max(x), 500);
-    y1 = polyval(p, x1);
-    scatter(x, y, d);
-    hold on;
-    plot(x1, y1);
-end
+% 
+% plotim.imgsrc = "DvsKs.png";
+% % imshow(pDimg);
+% % sig1 = plotim.pixelpoints{1};
+% % hold on;
+% % plot(sig1(:, 1), sig1(:, 2), 'LineWidth',2.5);
+% 
+% fid = fopen("Ks(D).json", "w+");
+% json = jsonencode(plotim);
+% fprintf(fid, "%s", json);
+% fclose(fid);
+% plotim.plot();
+% hold on;
+% plotim.yinfer(1.6)

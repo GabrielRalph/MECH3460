@@ -20,7 +20,9 @@
         <!-- Execuative Summary -->
         <section>
           <h1>Execuative Summary</h1>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          <div>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          </div>
         </section>
 
         <!-- Design Parameters -->
@@ -31,7 +33,7 @@
               <b>Design Dimensions</b>
               <row-1>
                 <div>Pitch Circle Radius $r_p$ = </div>
-                <div><input value = "165" class = "variable" name = "rp"/> $\tx{mm}$</div>
+                <div><input value = "308.64 / 2" class = "variable" name = "rp"/> $\tx{mm}$</div>
               </row-1>
 
               <row-1>
@@ -62,13 +64,22 @@
               </row-1>
 
               <row-1>
-                <div>Gearbox CoA Distance $\tx{Gcd}$ = </div>
-                <div><input value = "65" class = "variable" name = "Gcd"/> $\tx{mm}$</div>
+                <div>Gearbox + motor CoA Distance $\tx{Gcd}$ = </div>
+                <div><input value = "245 * 0.6" class = "variable" name = "Gcd"/> $\tx{mm}$</div>
               </row-1>
 
               <row-1>
-                <div>Weight of Gearbox $m_w$ = </div>
-                <div><input value = "100" class = "variable" name = "mw"/> $\tx{kg}$</div>
+                <div>Weight of Gearbox + motor $m_w$ = </div>
+                <div><input value = "90 + 40" class = "variable" name = "mw"/> $\tx{kg}$</div>
+              </row-1>
+
+              <row-1>
+                <div>Output speed $n_e$ = </div>
+                <div><input value = "100" class = "variable" name = "ne"/> $\tx{RPM}$</div>
+              </row-1>
+              <row-1>
+                <div>Input speed $n_i$ = </div>
+                <div><input value = "1440" class = "variable" name = "ni"/> $\tx{RPM}$</div>
               </row-1>
             </div>
             <div>
@@ -159,7 +170,7 @@
           </output>
 
           <figure>
-            <row-2>
+            <div>
               <div>
                 <svg-plot
                 class = "variable"
@@ -223,7 +234,7 @@
                 return {M_x: line}
                 </script>
               </div>
-            </row-2>
+            </div>
             <figcaption>
               Shear Force and Moment diagrams along the shaft.
             </figcaption>
@@ -238,7 +249,7 @@
             $$M_q = \cfrac{\tx{Pbs}}{2}(2{R_A}_y - F_L\cos \phi) = ~1[Mq]{(2 * RA - FL * cos(phi)) * Pbs/2} \tx{ kN} \cdot \tx{mm}$$
           </output>
 
-          <figure style = "margin: 0 5em">
+          <figure style = "margin-left: 5em; margin-right: 5em;">
             <img src = "./fig_FBD_zx.svg" />
             <figcaption>
               FBD of Shaft (from above)
@@ -251,7 +262,7 @@
             By taking the sum of forces in the $z$ axis we can find the horizontal component of $R_A$
             $${R_A}_z = {R_B}_z = ~[RAz]{RBz} \tx{ kN}$$
             In this way the maximum moment about the $y$ axis will be between points $A$ and $B$
-            $$m_y = \frac{\tx{Pbs}}{2}F_L \sin \phi = ~[my]{(Pbs/2) * FL * sin(phi)} \tx{ kN} \cdot \tx{mm}$$
+            $$m_y = \frac{\tx{Pbs}}{2}F_L \sin \phi = ~[my]{(Pbs/2) * RAz} \tx{ kN} \cdot \tx{mm}$$
 
             Finaly the total magnitude of reaction the forces was found to be
               $$R_A = ~[SRA]{sqrt(RA*RA + RAz*RAz)}\tx{ MPa}, \quad R_B = ~[SRA]{sqrt(RB*RB + RBz*RBz)}\tx{ MPa}$$
@@ -300,71 +311,62 @@
 
         <!-- AS1403 Axil Diameter Selection (5) -->
         <section>
-          <h1>AS1403 Axil Diameter Selection</h1>
+          <h1>AS1403 Shaft Diameter Selection</h1>
+          <div>
+            To calculate the stress raising factor $K_s$ a point was taken on the plot.
+          </div>
+          <figure>
+            <plot-image class = "variable" name = "Ks_D" src = "../Solver/PlotImageData/Ks(D).json">
+            </plot-image>
+            <figcaption>
+              Size stress raising factor (auto interpolator).
+            </figcaption>
+          </figure>
 
-          <section>
-            <h1>Stress Raising Factors</h1>
-            <div>
-              To calculate the stress raising factor $K_s$ a point was taken on the plot.
-            </div>
+          <script type = "solver">
+          let Ks = 1;
+          if (!K) var K = 1;
+          log("K = " + K);
+          function next_D(d0) {
+            // let {Mq, Pq, Tq, FS, FR, K, Ks_D} = scope;
+            Ks = Ks_D(d0);
+            let KsK = Ks * K;
+            // console.log(Ks);
+            let d = ((1e4 * FS) / (FR)) *
+            sqrt(
+              pow(KsK * (Mq + Pq * d0 / 8000), 2) +
+              (3/16) * pow((1 + KsK) * Tq, 2)
+            );
+            return pow(d, 1/3);
+          }
 
-            <figure>
-              <plot-image class = "variable" name = "Ks_D" src = "../Solver/PlotImageData/Ks(D).json">
-              </plot-image>
-              <figcaption>
-                Size stress raising factor (auto interpolator).
-              </figcaption>
-            </figure>
+          let dia = null;
+          let dia0 = D0;
+          let error = 1;
+          let ittc = 0;
+          while (error > 0.001 && ittc < 10) {
+            dia = next_D(dia0);
+            error = (dia - dia0) / dia;
+            dia0 = dia;
+            ittc++;
+          }
 
-            <script type = "solver">
-            let Ks = 1;
-            if (!K) var K = 1;
-            log("K = " + K);
-            function next_D(d0) {
-              // let {Mq, Pq, Tq, FS, FR, K, Ks_D} = scope;
-              Ks = Ks_D(d0);
-              let KsK = Ks * K;
-              // console.log(Ks);
-              let d = ((1e4 * FS) / (FR)) *
-              sqrt(
-                pow(KsK * (Mq + Pq * d0 / 8000), 2) +
-                (3/16) * pow((1 + KsK) * Tq, 2)
-              );
-              return pow(d, 1/3);
-            }
-
-            let dia = null;
-            let dia0 = D0;
-            let error = 1;
-            let ittc = 0;
-            while (error > 0.001 && ittc < 10) {
-              dia = next_D(dia0);
-              error = (dia - dia0) / dia;
-              dia0 = dia;
-              ittc++;
-            }
-
-            return {
-              D1: dia,
-            }
-            </script>
-          </section>
-
-          <section>
-            <h1>Solving for Diameter</h1>
-            <output>
-              The following equation, from the AS1403-2004 rotating shaft standards $$\hat{D}^3 = \cfrac{10^4F_S}{F_R}\sqrt{\left[K_s K \left( M_q + \cfrac{P_q D}{8000}\right)\right]^2 + \cfrac{3}{16}\left[(1 + K_s K )T_q\right]^2}$$ for a shaft with more than 600 start stops and more than 900 power applied torque reversals per year
-              was used to find a better diamter $\hat{D}$ from a guess diameter $D$.
-              Itterations where continued until $\left| \cfrac{\hat{D} - D}{\hat{D}} \right| \le 0.1\%$.
-              Given the trial diameter of $D_0 = ~{D0}\text{mm}$ a final diameter of
-              $$D_1 = ~{D1}\text{mm}$$
-            </output>
-          </section>
+          return {
+            D1: dia,
+          }
+          </script>
+          <output>
+            The following equation, from the AS1403-2004 rotating shaft standards $$\hat{D}^3 = \cfrac{10^4F_S}{F_R}\sqrt{\left[K_s K \left( M_q + \cfrac{P_q D}{8000}\right)\right]^2 + \cfrac{3}{16}\left[(1 + K_s K )T_q\right]^2}$$ for a shaft with more than 600 start stops and more than 900 power applied torque reversals per year
+            was used to find a better diamter $\hat{D}$ from a guess diameter $D$.
+            Itterations where continued until $\left| \cfrac{\hat{D} - D}{\hat{D}} \right| \le 0.1\%$.
+            Given the trial diameter of $D_0 = ~{D0}\text{mm}$ a final diameter of
+            $$D_1 = ~{D1}\text{mm}$$
+          </output>
         </section>
 
         <!-- ASME Ellipse Diameter Selection (5) -->
         <section>
-          <h1>ASME Axil Diameter Selection</h1>
+          <h1>ASME Shaft Diameter Selection</h1>
           <section>
             <h1>Maximum Stresses</h1>
             <output>
@@ -409,7 +411,7 @@
               hence will contribute to the mean stress.
               $$\sigma_{a2} = 1000\cdot \cfrac{32 M_q}{\pi D^3} = ~[tsa2]{abs(1000 * 32 * Mq / (pi * pow(D2, 3)))} \tx{ MPa}$$
               $$\sigma_{m2} = 1000\cdot \sqrt{3}\cfrac{16T_q}{\pi D^3} = ~[tsm2]{abs(1000 * sqrt(3) * 16 * Tq / (pi * pow(D2, 3)))} \tx{ MPa}$$
-              Values where obtained for the trial diamter $D_0$.
+              Values shown for the final derived diamter $D_2$.
             </output>
           </section>
 
@@ -466,11 +468,6 @@
                 GL_plot.line("ASME Ellipse", line);
                 GL_plot.scatter("shaft-stress-1", [[sm1, sa1]], 2, "blue");
                 GL_plot.scatter("shaft-stress-2", [[sm2, sa2]], 2, "blue");
-                // GL_plot.scatter("", [[cos(th1), sa2]], 2, "blue");
-                // GL_plot.line("", [[cos(th1)*a, sin(th1)*b], [sm1, sa1]]);
-                GL_plot.scatter("", [[cos(th1)*a, sin(th1)*b]], 1.5, "#0005");
-                // GL_plot.line("", [[cos(th2)*a, sin(th2)*b], [sm2, sa2]]);
-                GL_plot.scatter("", [[cos(th2)*a, sin(th2)*b]], 1.5, "#0005");
 
 
                 return {
@@ -528,13 +525,82 @@
         </section>
       </section>
 
+      <!-- Gearbox selection (3) -->
+      <section>
+        <h1>Gearbox Selection</h1>
+        <div>
+          As per the specifications on page 7 in the SALA BR-Series-J Hasft Mounted Gearbox datasheet.<br />
+          A service factor $\tx{fb} = $<input value="1.2" class = "variable" name = "fb" /> was choosen for a uniform load with no shock, $16$ hours of daily operation and
+          $\tx{10 - 200}$ start stops per hour. The maximum allowed torque at the service factor was calculated to be
+        </div>
+        <output>
+          $$T2_\min = T_q \cdot \tx{fb} = ~[T2]{Tq * fb} \tx{ kN} \cdot \tx{mm}$$
+          The J72 gearboxes (table on page 47 of datasheet) where the only capable of creating an output speed of $n_e = ~{ne} \pm 5\%$ and $T2 > T2_\min$.
+          Details of the two J72 gearboxe variants are shown in the table below.
+
+        </output>
+        <script type = "solver">
+          let gbh = [
+            ["Product ID",  "Reduction Ratio<br />$n_i / n_e$", "Max Torque at 100RPM<br />$\\tx{N} \\cdot \\tx{m}$", "$\\tx{Pt}$<br />$\\tx{kW}$", "Shaft Sleave Diameter<br />$\\tx{mm}$", "$\\tx{Gbw}$<br />$\\tx{mm}$", "Weight<br />$\\tx{kg}$"]
+          ]
+          let gb = [
+            ["J72A",         14.61,            3776,  33,                70,                      203, 90],
+            ["J72B",         14.61,            3776,  33,                85,                      203, 90],
+            // ["J125",         14.79,            18478,                 125,                     375],
+          ]
+          return {
+            gearboxes: gb,
+            gearboxheaders: gbh
+          }
+        </script>
+        <output>
+          <table>
+            <thead>
+              <!-- ~{table2HTMLRows(gearboxheaders)} -->
+            </thead>
+            <tbody>
+              <!-- ~{table2HTMLRows(gearboxes)} -->
+            </tbody>
+          </table>
+        </output>
+
+        <div>
+          <ul>
+            <li>
+              An ambient temperature factor of $\tx{ft} = $ <input class = "variable" value = "0.94" name = "ft" /> was selected (from table 3 of the datasheet).
+              to ensure safe operation during hot days of $30^\circ$ temperatures.
+            </li>
+            <li>
+              An altitude factor of $\tx{fa} =$ <input class = "variable" value = "0.95" name = "fa" /> was selected (from table 4 of the datasheet)
+              for operation in altidues up to $750\tx{m}$ above sea level.
+            </li>
+            <li>
+              An ambient air velocity factor of $\tx{fv} =$ <input class = "variable" value = "1" name = "fv" /> was selected (from table 5 of the datasheet)
+              for operation in a sheltered outdoor space.
+            </li>
+            <li>
+              An operation time factor of $\tx{fu} =$ <input class = "variable" value = "1.15" name = "fu" /> was selected (from table 6 of the datasheet)
+              for operation $60\%$ of the time.
+            </li>
+          </ul>
+        </div>
+        <output>
+          From the equation for power $P = \cfrac{\tx{force} \cdot \tx{linear distance}}{\tx{time}}$ the following expression for power was derived.
+          $$P_e = \cfrac{F_L \cdot  2 \pi r_p n_e}{60\tx{s}}\cdot \cfrac{1}{1000} = ~[Pe]{FL * 2 * pi * rp * ne / (60 * 1000)} \tx{ kW}$$
+          The minimum thermal rating of the gear was calculated as
+          $$\tx{Pt}_\min = \cfrac{P_e}{\tx{ft} \cdot \tx{fa} \cdot \tx{fv} \cdot \tx{fu}}
+          = ~[Ptmin]{Pe / (ft * fa * fv * fu)} \tx{ kW}$$
+          for a horizontal application. Which was less than the thermal rating of $~{gearboxes[0][3]}\tx{ kW}$ for both J72A and J72B.
+        </output>
+      </section>
+
       <!-- Shaft properties (5) -->
       <section>
         <h1>Final Shaft Selection</h1>
 
         <row-1>
           <div>Selected shaft diameter $D$ = </div>
-          <div><input value = "D1" class = "variable" name = "D"/> $\tx{mm}$</div>
+          <div><input value = "85" class = "variable" name = "D"/> $\tx{mm}$</div>
         </row-1>
 
         <!-- Shaft Length (3) -->
@@ -542,106 +608,256 @@
         <!-- Shaft Material (2) -->
       </section>
 
-      <!-- Gearbox selection (3) -->
-      <section>
-        <h1>Gearbox Selection</h1>
-      </section>
-
       <!-- Chain Sprocket Key Selection (3) -->
       <section>
         <h1>Chain Sprocket Key Selection</h1>
+
+        <!-- DATA -->
+        <script type = "solver">
+          let chain_selcols = [0, 1, 3, 4, 14];
+          let chains_head = selectTableColumns([
+            //  0           1           2            3                     4                    5                   6               7                 8                         9                     10            11              12                            13                    14                                    15
+            ["Product", "Chain No.", "ISO Ref.", "Pitch ($\\tx{inch}$)", "Pitch ($\\tx{mm}$)", "Inside Width B", "Roller Diam. C", "Plate Height D", "Plate Width Inner F", "Plate Width Outer F", "Pin Diam. G", "Pin Length", "Conn. Link Extension J", "Transverse Pitch K", "ISO606 Tensile Strength ($\\tx{kN}$)", "Weight ($\tx{kg / m}$)"]
+          ], chain_selcols);
+          let chains = selectTableColumns([
+            // Page 14
+            ["Renold Syno PB", "120A1SP","120-1", 1.50,  38.10,25.50,22.23,36.20,4.80,4.80,11.11,49.3,5.3,"-",125000,5.2],
+            ["Renold Syno PB", "140A1SP","140-1", 1.75,  44.45,25.73,25.40,42.23,5.61,5.61,12.71,52.9,5.2,"-",170000,6.8],
+            ["Renold Syno PB", "160A1SP","160-1", 2.00,  50.80,31.55,28.58,48.26,6.35,6.35,14.29,63.1,6.5,"-",223000,8.9],
+            ["Renold Syno PB", "200A1SP","200-1", 2.50,  63.50,38.00,39.67,60.33,8.13,8.13,19.85,76.9,9.0,"-",347000,14.6],
+
+            // Page 24
+            ["Renold Roller Chain", "60A1", "60-1", 0.750, 19.050, 12.57, 11.91, 17.50, 2.45, 2.45, 5.94, 25.3, 2.6, "-", 31300, 1.47],
+            ["Renold Roller Chain", "80A1", "80-1", 1.000, 25.400, 15.75, 15.88, 24.13, 3.25, 3.25, 7.94, 32.7, 3.0, "-", 55600, 2.80],
+            ["Renold Roller Chain", "100A1", "100-1", 1.250, 31.750, 18.90, 19.05, 30.17, 4.06, 4.06, 9.54, 39.7, 4.2, "-", 87000, 4.20],
+            ["Renold Roller Chain", "120A1", "120-1", 1.500, 38.100, 25.23, 22.23, 36.20, 4.80, 4.80, 11.11, 49.3, 5.3, "-", 125000, 5.70],
+            ["Renold Roller Chain", "140A1", "140-1", 1.750, 44.450, 25.23, 25.40, 42.23, 5.61, 5.61, 12.71, 52.9, 5.2, "-", 170000, 7.80],
+            ["Renold Roller Chain", "160A1", "160-1", 2.000, 50.800, 31.55, 28.58, 48.26, 6.35, 6.35, 14.29, 63.1, 6.5, "-", 223000, 10.40],
+            ["Renold Roller Chain", "180A1", "180-1", 2.250, 57.150, 35.48, 35.71, 54.30, 7.11, 7.11, 17.46, 70.6, 7.9, "-", 281000, 13.94],
+            ["Renold Roller Chain", "200A1", "200-1", 2.500, 63.500, 37.85, 39.67, 60.33, 8.13, 8.13, 19.85, 76.9, 9.0, "-", 347000, 17.30],
+          ], chain_selcols);
+          chains.sort((a, b) => a[3] > b[3] ? 1 : -1);
+          for (let chain of chains) {
+            chain[4] = chain[4]/1000;
+          }
+
+          // Pages 72-74
+          let socket_selcols = [0, 1, 2, 4, 5, 6, 8];
+          let sockets_head = selectTableColumns([
+            //        0                   1               2         3           4           5                  6              7             8           9         10                  11            12            13            14            15                16          17            18
+            ["Pitch ($\\tx{inch}$)", "No. of Teeth", "PCD A", "Top Diam. C", "Part No.", "Min Bore $\\tx{D}$", "Max Bore $\\tx{D}$", "Boss Diam. E", "Dist Thro. F", "Part No.", "Min Bore (D)", "Max Bore (D)", "Boss Diam.", "Dist Thro.", "Part No.", "Min Bore (D)", "Max Bore (D)", "Boss Diam.", "Dist Thro."]
+          ], socket_selcols);
+          let sockets = selectTableColumns([
+            [1, 30, 243.00, 254.6, "16B1/30T", 20.0, 75.0, 120.0, 50.0, "16B2/30T*", 25.0, 85.0, 130.0, 70.0, "16B3/30T*", 30.0, 85.0, 130.0, 100.0],
+            [1, 38, 307.59, 319.2, "16B1/38T*", 25.0, 75.0, 120.0, 50.0, "16B2/38T*", 25.0, 90.0, 140.0, 70.0, "16B3/38T*", 30.0, 90.0, 140.0, 100.0],
+            [1.25, 21, 213.03, 232.41, "20B1/21T", 30.0, 100.0, 140.0, 55.0, "20B2/21T", 30.0, 100.0, 140.0, 80.0, "20B3/21T", 30.0, 100.0, 140.0, 115.0],
+            [1.25, 25, 253.31, 272.03, "20B1/25T", 30.0, 100.0, 140.0, 55.0, "20B2/25T", 30.0, 100.0, 140.0, 80.0, "20B3/25T", 30.0, 100.0, 140.0, 115.0],
+            [1.5, 23, 279.81, 300.23, "24B1/23T", 30.0, 105.0, 150.0, 60.0, "24B2/23T", 30.0, 114.0, 160.0, 100.0, "24B3/23T", 40.0, 114.0, 160.0, 150.0],
+            [1.5, 25, 303.99, 324.10, "24B1/25T", 30.0, 105.0, 150.0, 60.0, "24B2/25T", 30.0, 114.0, 160.0, 100.0, "24B3/25T", 40.0, 114.0, 160.0, 150.0],
+            [1.75, 23, 326.44, 352.04, "28B1/23T", 30.0, 114.0, 160.0, 75.0, "28B2/23T", 30.0, 128.0, 180.0, 120.0, "28B3/23T", 40.0, 128.0, 180.0, 180.0],
+            [1.75, 25, 354.66, 379.98, "28B1/25T", 30.0, 114.0, 160.0, 75.0, "28B2/25T", 30.0, 128.0, 180.0, 120.0, "28B3/25T", 40.0, 128.0, 180.0, 180.0],
+            [2, 19, 308.64, 337.82, "32B1/19T", 30.0, 114.0, 160.0, 90.0, "32B2/19T", 40.0, 142.0, 200.0, 120.0, "32B3/19T", 40.0, 142.0, 200.0, 180.0],
+            [2, 21, 340.84, 372.66, "32B1/21T", 40.0, 128.0, 180.0, 90.0, "32B2/21T", 40.0, 142.0, 200.0, 120.0, "32B3/21T", 40.0, 142.0, 200.0, 180.0],
+          ], socket_selcols);
+
+
+          return {
+            sprocketData: sockets,
+            sprocketHeaders: sockets_head,
+            chainData: chains,
+            chainHeaders: chains_head,
+            keywayHeaders: [
+              ["b<br />$\\tx{mm}$", "h", "$D_\\min$", "$D_\\max$"]
+            ],
+            keyways: [
+              [8, 7, 22, 30],
+              [10, 8, 30, 38],
+              [12, 8, 38, 44],
+              [14, 9, 44, 50],
+              [16, 10, 50, 58],
+              [18, 11, 58, 65],
+              [20, 12, 65, 75],
+              [22, 14, 75, 85],
+              [25, 14, 85, 95],
+              [28, 16, 95, 110],
+              [32, 18, 110, 130],
+            ]
+          }
+        </script>
+
+        <!-- Key Selection -->
         <section>
           <h1>Key Selection</h1>
-          <row-1>
-            <div>Yield strength of Key $S_y$ = </div>
-            <div><input value = "200" class = "variable" name = "Sy"/> $\tx{MPa}$</div>
-          </row-1>
-          <output>
-            The key will experience a shearing force due to the torque caused
-            by the tension leg
-            $$F_K = \cfrac{2T_q}{D} = ~[FK]{2 * Tq / D} \tx{ kN}$$
-            By distortion energy theory the shear strength of the key will be
-            $$S_{xy} = 0.577S_y = ~[Sxy]{0.577 * Sy} \tx{ MPa}$$
-            <table>
-              <tr>
-                <td>
-                  $b \times h \tx{ mm}$
-                </td>
-                <td>
-                 Min Length $\tx{ mm}$ (Shearing)
-                </td>
-                <td>
-                 Min Length $\tx{ mm}$ (Crushing)
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <!-- $b \times h$ -->
-                </td>
-                <td>
-                  $l = \cfrac{1000 \cdot F_S F_K}{b S_{xy}}$
-                </td>
-                <td>
-                  $l = \cfrac{1000 \cdot 2 F_S F_K}{h S_{y}}$
-                </td>
-              </tr>
-              <tr><td> $2 \times 2$ </td>  <td> $~{1000 * FS * FK / (2 * Sxy)}$ </td><td> $~{2000 * FS * FK / (2 * Sy)}$ </td></tr>
-              <tr><td> $5 \times 5$ </td>    <td> $~{1000 * FS * FK / (5 * Sxy)}$ </td><td> $~{2000 * FS * FK / (5 * Sy)}$ </td></tr>
-              <tr><td> $10 \times 8$ </td>  <td> $~{1000 * FS * FK / (10 * Sxy)}$ </td><td> $~{2000 * FS * FK / (8 * Sy)}$ </td></tr>
-              <tr><td> $14 \times 9$ </td>   <td> $~{1000 * FS * FK / (14 * Sxy)}$ </td><td> $~{2000 * FS * FK / (9 * Sy)}$ </td></tr>
-              <tr><td> $16 \times 10$ </td> <td> $~{1000 * FS * FK / (16 * Sxy)}$ </td><td> $~{2000 * FS * FK / (10 * Sy)}$ </td></tr>
-              <tr><td> $22 \times 14$ </td> <td> $~{1000 * FS * FK / (22 * Sxy)}$ </td><td> $~{2000 * FS * FK / (14 * Sy)}$ </td></tr>
-              <tr><td> $25 \times 14$ </td>   <td> $~{1000 * FS * FK / (25 * Sxy)}$ </td><td> $~{2000 * FS * FK / (14 * Sy)}$ </td></tr>
-            </table>
+          <row-2>
+            <div>
+              <row-1>
+                <div>Yield strength of key $S_y$ = </div>
+                <div><input value = "200" class = "variable" name = "Sy"/> $\tx{MPa}$</div>
+              </row-1>
+              <output>
+                The key will experience a shearing force due to the torque caused
+                by the tension leg
+                $$F_K = \cfrac{2T_q}{D} = ~[FK]{2 * Tq / D} \tx{ kN}$$
+                By distortion energy theory the shear strength of the key will be
+                $$S_{xy} = 0.577S_y = ~[Sxy]{0.577 * Sy} \tx{ MPa}$$
 
+                The minimum safe length for a key was found by equating the keys safe strength
+                to the corresponding stress, specifically
+                $$l_\min = 1000 \cdot F_S F_K \max (\cfrac{1}{b S_{xy}}, \quad \cfrac{2}{h S_{y}})$$
+              </output>
+            </div>
+            <figure style = "width: 55%">
+              <img src = "./key.svg" />
+              <figcaption>
+                Areas of crush ($l\times \frac{h}{2}$ red) and shear ($b \times l$ blue) stress.
+              </figcaption>
+            </figure>
+          </row-2>
+          <script type = "solver">
+            let minL = (b, h) => round(1000 * FS * FK * max(1 / (b * Sxy),  2 / (h * Sy)));
+
+            let mml = null;
+            let format = [];
+            keywayHeaders[0][4] = ("$l_\\min$");
+            for (let i = 0; i < keyways.length; i++) {
+              let [b, h, minD, maxD] = keyways[i];
+              let minl = minL(b,h);
+              keyways[i][4] = minl;
+              if (D >= minD && D <= maxD) {
+                if (mml > minl || mml == null) mml = minl;
+                format.push((new Array(5)).fill("selected"));
+              }
+              else format.push(new Array(5));
+            }
+
+            return {
+              keywayFormat: format,
+              minKeyL: mml,
+            }
+          </script>
+
+          <output>
+            <table caption = "Keyway dimensions in mm.">
+              <thead>
+                <!-- ~{table2HTMLRows(keywayHeaders)} -->
+              </thead>
+              <tbody>
+                <!-- ~{table2HTMLRows(keyways, keywayFormat)} -->
+              </tbody>
+            </table>
+          </output>
+
+
+        </section>
+
+        <!-- Sprocket Selection -->
+        <section>
+          <h1>Sprocket Selection</h1>
+          <script type = "solver">
+            // log(minKeyL)
+            let format = [];
+            let vpitches = {}
+            for (let i = 0; i < sprocketData.length; i++) {
+              let [ptc, teeth, pcd, id, minD, maxD, maxl] = sprocketData[i];
+              if ((D >= minD && D <= maxD) && minKeyL < maxl) {
+                format.push((new Array(7)).fill("selected"));
+                vpitches[ptc] = true;
+              }
+              else format.push(new Array(7));
+            }
+
+
+            return {
+              sprocketFormat: format,
+              validPitches: vpitches,
+            }
+          </script>
+          <output>
+            <table>
+              <thead>
+                <!-- ~{table2HTMLRows(sprocketHeaders)} -->
+              </thead>
+              <tbody>
+                <!-- ~{table2HTMLRows(sprocketData, sprocketFormat)} -->
+              </tbody>
+            </table>
           </output>
         </section>
+
+        <!-- Chain Selection -->
+        <section>
+          <h1>Chain Selection</h1>
+          <div>
+            From the Renold Transmission Chain Catalogue two products where selected,
+            the Simplex Renold Roller Chain (ANSI Standard) and the Simplex Renold Syno Polymer Bush (ANSI Standard) across a range of diffferent pitches.
+            The Polymer Bush was recomended for mixers in the catalogue.
+          </div>
+          <script type = "solver">
+            let format = [];
+            for (let i = 0; i < chainData.length; i++) {
+              let [id, cid, ptc, ptcmm, maxT] = chainData[i];
+              if (ptc in validPitches && maxT > (FL * FS)) {
+                format.push((new Array(5)).fill("selected"));
+              }
+              else format.push(new Array(5));
+            }
+
+
+            return {
+              chainFormat: format,
+            }
+          </script>
+          <output>
+            <table>
+              <thead>
+                <!-- ~{table2HTMLRows(chainHeaders)} -->
+              </thead>
+              <tbody>
+                <!-- ~{table2HTMLRows(chainData, chainFormat)} -->
+              </tbody>
+            </table>
+            From the Table 2 it can be seen that chains with pitches largers than $1^"$ where capable of taking
+            loads far beyond the required load $F_L = ~{FL} \tx{ kN}$.
+          </output>
+        </section>
+
       </section>
 
       <!-- Plumber Block and Bearing Selection -->
       <section>
+        <script type = "solver">
+          // let bearings = ;
+          log("hey")
+          return {
+            bearings: [
+              ["SYNT35",35,96.5,35,"-"],
+              ["SYNT40",40,96.5,9.8,"ECY208"],
+              ["SYNT45",45,102,10.8,"ECY209"],
+              ["SYNT50",50,104,11.8,"ECY210"],
+              ["SYNT55",55,125,13.7,"ECY211"],
+              ["SYNT60",60,156,18.6,"ECY212"],
+              ["SYNT65",65,193,24,"ECY213"],
+              ["SYNT70",70,208,25.5,"ECY214"],
+              ["SYNT75",75,212,26.5,"ECY215"],
+              ["SYNT80",80,236,29,"–"],
+              ["SYNT90",90,325,39,"–"],
+              ["SYNT100",100,425,49,"–"]
+            ],
+          }
+        </script>
         <h1>Plumber Block and Bearing Selection</h1>
-        <table>
-          <tr>
-            <td>Bearing unit</td><td>Shaft diameter $\tx{mm}$</td><td>Basic load ratings $\tx{kN}$</td><td>Fatigue load limit $\tx{kN}$</td><td>End cover</td>
-          </tr>
-          <tr>
-            <td>SYNT35</td><td>35</td><td>96.5</td><td>35</td><td>-</td>
-          </tr>
-          <tr>
-            <td>SYNT40</td><td>40</td><td>96.5</td><td>9.8</td><td>ECY208</td>
-          </tr>
-          <tr>
-            <td>SYNT45</td><td>45</td><td>102</td><td>10.8</td><td>ECY209</td>
-          </tr>
-          <tr>
-            <td>SYNT50</td><td>50</td><td>104</td><td>11.8</td><td>ECY210</td>
-          </tr>
-          <tr>
-            <td>SYNT55</td><td>55</td><td>125</td><td>13.7</td><td>ECY211</td>
-          </tr>
-          <tr>
-            <td>SYNT60</td><td>60</td><td>156</td><td>18.6</td><td>ECY212</td>
-          </tr>
-          <tr>
-            <td>SYNT65</td><td>65</td><td>193</td><td>24</td><td>ECY213</td>
-          </tr>
-          <tr>
-            <td>SYNT70</td><td>70</td><td>208</td><td>25.5</td><td>ECY214</td>
-          </tr>
-          <tr>
-            <td>SYNT75</td><td>75</td><td>212</td><td>26.5</td><td>ECY215</td>
-          </tr>
-          <tr>
-            <td>SYNT80</td><td>80</td><td>236</td><td>29</td><td>–</td>
-          </tr>
-          <tr>
-            <td>SYNT90</td><td>90</td><td>325</td><td>39</td><td>–</td>
-          </tr>
-          <tr>
-            <td>SYNT100</td><td>100</td><td>425</td><td>49</td><td>–</td>
-          </tr>
-        </table>
+        <output>
+          <table>
+            <thead>
+              <tr>
+                <td>Bearing unit</td><td>Shaft diameter $\tx{mm}$</td><td>Basic load ratings $\tx{kN}$</td><td>Fatigue load limit $\tx{kN}$</td><td>End cover</td>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- ~{table2HTMLRows(bearings)} -->
+            </tbody>
+          </table>
+        </output>
       </section>
 
       <!-- Tolerancing Considerations -->
@@ -679,35 +895,95 @@
     </solver-frame>
   </body>
 
+  <script>
+    async function delay(t) {
+      return new Promise(function(resolve, reject) {
+        setTimeout(resolve, t);
+      });
+    }
+
+    async function scrollDown(t) {
+      await delay(5000);
+      let height = document.body.scrollHeight;
+      console.log(height);
+
+      let inc_p_ms = height / (15000);
+
+      for (let i = 0; i < height; i+=inc_p_ms * 20) {
+        window.scrollTo(0, i);
+        await delay(20);
+      }
+    }
+
+    // scrollDown()
+
+  </script>
+
 
   <style>
+  :root {
+    --fs: calc(0.9vmax + 0.9vmin);
+    --h1-fs: 2.7em;
+    --caption-spacing: calc(var(--fs) * 1);
+    --figure-spacing: calc(var(--fs) * 3);
+    counter-reset: tables;
+  }
+
   body {
     display: flex;
     font-family: "Supreme LL TT";
     font-weight: 300;
     flex-direction: column;
     font-size: var(--fs);
-    margin: 3em;
-    counter-reset: figure;
+    margin: 3em auto;
+    width: min(250mm, calc(100% - 6em));
+    counter-reset: figs;
   }
+  section {
+    padding-left: calc(var(--fs) * 2);
+  }
+/*
+  solver-frame {
+  } */
 
-  :root {
-    --fs: calc(0.9vmax + 0.9vmin);
-    --h1-fs: 2.7em;
-  }
+
 
   section > section:first-of-type > h1 {
     margin-top: 0;
+  }
+  section[collapsed] > :not(h1) {
+    display: none;
+  }
+  section[collapsed] > h1:first-of-type::before {
+    content: " ▼";
+    font-size: var(--fs);
+    position: absolute;
+    left: calc(-1 * var(--fs));
+    top: 50%;
+    color: #c2b4b4;
+    transform: translate(-100%, -50%);
+    /* float: right; */
+  }
+  section h1 {
+    position: relative;
+    font-size: var(--h1-fs);
+    margin-top: calc(var(--fs) * 3);
+    margin-bottom: calc(var(--fs) * 0.5);
+    cursor: pointer;
+  }
+  section section {
+    --h1-fs: 1.7em;
+  }
+  section section section {
+    --h1-fs: 1.3em;
   }
 
   figure{
     display: flex;
     flex-direction: column;
-  }
-  figure {
-    gap: 0.7em;
-    margin: calc(var(--fs) * 3) 0;
-    counter-increment: figure;
+    gap: var(--caption-spacing) 0;
+    margin: var(--figure-spacing) 0;
+    counter-increment: figs;
   }
   figure figcaption {
     text-align: center;
@@ -715,7 +991,7 @@
     font-style: italic;
   }
   figure figcaption::before {
-    content: "Figure " counter(figure) ": ";
+    content: "Figure " counter(figs) ": ";
   }
 
   .shear {
@@ -731,51 +1007,60 @@
   }
 
   input.variable  {
+
+    /* font: "Times New Roman"; */
     font: inherit;
+    font-family: Times;
     display: inline;
     outline: none;
     border: none;
     border-bottom: 1px solid black;
-    /* padding: 0;
-    margin: 0; */
+    padding: 0;
+    margin: 0;
+  }
+  li{
+    padding-bottom: var(--caption-spacing);
   }
   table {width: 100%;}
   img {
     width: 100%;
   }
 
-  section *[hidden] {
-    display: none;
-  }
-  section[collapsed] h1::after {
-    content: " ▼";
-    float: right;
-  }
-
-
-
-  section h1 {
-    font-size: var(--h1-fs);
-    margin-top: calc(var(--fs) * 3);
-    margin-bottom: calc(var(--fs) * 0.5);
-    cursor: pointer;
-  }
-
-  section section {
-    --h1-fs: 1.7em;
-  }
-  section section section {
-    --h1-fs: 1.3em;
-  }
 
   table {
     border-collapse: collapse;
+    margin: var(--figure-spacing) 0;
+    margin-bottom: calc(var(--figure-spacing) + var(--caption-spacing) + 1em);
+    position: relative;
+  }
+  table::after{
+    counter-increment: tables;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    text-align: center;
+    white-space: pre;
+    content: "Table " counter(tables) "\a" attr(caption);
+    font-style: italic;
+    transform: translate(-50%, 100%);
+    padding-top: var(--caption-spacing);
   }
   table td {
     border: 1px solid black;
     text-align: center;
     vertical-align: middle;
   }
+  thead td {
+    background: #2f3232;
+    color: #e9ebf1;
+  }
+  td.selected {
+    background: #d0fbd0;
+  }
+  td {
+    padding: 0.3em;
+  }
+
 
 
     row-2 {
@@ -795,6 +1080,9 @@
       min-height: 3em;
     }
 
+    row-2 figure {
+      margin: 0;
+    }
     row-2 svg-plot {
       font-size: 0.7em;
     }

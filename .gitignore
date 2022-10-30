@@ -3,6 +3,7 @@
 /GABRIEL
 */Hide
 *.pdf
+.pdf
 /Lab9 Shafts
 *.mp3
 *.ai

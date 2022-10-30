@@ -2,6 +2,8 @@ import {SvgPlus} from "../SvgPlus/4.js"
 import {loadTypeset, typeset} from "./typeset.js"
 import {} from "./PlotImageData/plot-image.js"
 import {} from "./Plots/plots.js"
+import {} from "./print-img.js"
+
 function round(num, dp = 0) {
   let pw = Math.pow(10, dp);
   return Math.round(num * pw) / pw;
@@ -48,9 +50,7 @@ function addCollapseHandlers(element) {
     header.onclick = () => {
       toggleCollapsed(header);
     }
-    if (!section.querySelector("section")) {
-      toggleCollapsed(header);
-    }
+    
   }
 }
 

@@ -13,16 +13,38 @@
       <section>
         <h1>Problem Statement</h1>
         <section>
-          <img src = "https://mech3460.w4v.es/A3/fig0.png" />
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          <output>
+            <img src = "https://mech3460.w4v.es/A3/fig0.png" />
+            Design a suitable shaft to be used for a mixer. The shaft will be powered using a gearbox
+            with a ~{ni}RPM input motor speed and a required output speed of ~{ne}RPM $\pm 5\%$.
+            The shaft will be required to turn a chain sprocket with pitch diamter of $~330\tx{ mm}$.
+            The tension in the chain will be at most $~{FL} \tx{ kN}$ at $15^\circ$ of vertical.
+            The mixing drum will produce essentially no shock loads.
+            Operation of the mixer will be for 12h per day with less than 20 start stops
+            per hour. Operation will occur in a fairly dusty environment. Bearings and a frame
+            must also be designed inorder to support the shaft and forces experienced.
+          </output>
         </section>
 
         <!-- Execuative Summary -->
         <section>
           <h1>Execuative Summary</h1>
-          <div>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-          </div>
+          <output>
+            Shaft diamter was calculated using two methods, AS1403 and fatigue analysis.
+            A diameter of $D_1 = ~{D1} \tx{ mm}$ was found using the AS1403 and $D_2 = ~{D2} \tx{ mm}$ using
+            the ASME fatigue ellipse.
+            Consequently a diameter of $D = ~{D}\tx{ mm}$ was choosen due to the compatiability
+            with the available bearings.
+            The J72A gearbox was selected from the SALA J-Series Shaft Mounted Gearbox Catalogue.
+            The shaft will require a diameter step from $D_G = ~{DG}\tx{ mm}$ at the gearbox to $D = ~{D}\tx{ mm}$
+            for the remainder of the shaft.
+            A $22 \times 14 \tx { mm}$ key with length $90\tx{ mm}$ was selected to transmit power from the shaft to the sprocket.
+            This was also the same sized key as recomended for the gearbox.
+            The 32B1/19T sprocket (with pitch circle diameter of $~{rp*2} \tx{ mm}$) and Renold Syno Polymer Bush was choosen
+            from the Renold Chain Transmission Catalogue.
+            The SYNT80 bearing and housing solution was selected from the SKF Bearing Housing Catalogue.
+
+          </output>
         </section>
 
         <!-- Design Parameters -->
@@ -174,104 +196,103 @@
           <div>
             <div>
               <svg-plot
-              class = "variable"
-              name = "Vplot"
-              title = "Shear Force Plot"
-              x-label = "$x \tx{ (mm)}$"
-              y-label = "$v \tx{ (kN)}$"
-              plot-size = "300, 90"
-              grid-on>
-            </svg-plot>
-            <script type = "solver">
-              let d2 = (2 * Clr + Pbw + Gbw) / 2;
-              let FLy = FL * Math.cos(15 * Math.PI / 180);
+                class = "variable"
+                name = "Vplot"
+                title = "Shear Force Plot"
+                x-label = "$x \tx{ (mm)}$"
+                y-label = "$v \tx{ (kN)}$"
+                plot-size = "300, 90"
+                grid-on>
+              </svg-plot>
+              <script type = "solver">
+                let d2 = (2 * Clr + Pbw + Gbw) / 2;
+                let FLy = FL * Math.cos(15 * Math.PI / 180);
 
-              let py = 5;
-              let miny = (RA - FLy);
-              Vplot.axisStart = `-20, ${miny - py*1.25}`
-              Vplot.axisEnd = `${d2 + Pbs + 20}, ${(RA - FLy + RB) + py}`;
+                let py = 5;
+                let miny = (RA - FLy);
+                Vplot.axisStart = `-20, ${miny - py*1.25}`
+                Vplot.axisEnd = `${d2 + Pbs + 20}, ${(RA - FLy + RB) + py}`;
 
-              Vplot.line("shear", [[0,0],[0, RA], [Pbs/2, RA], [Pbs/2, RA - FLy], [Pbs, RA - FLy], [Pbs, RA - FLy + RB], [Pbs + d2, RA - FLy + RB], [Pbs + d2, RA - FLy + RB - FW]]);
-            </script>
+                Vplot.line("shear", [[0,0],[0, RA], [Pbs/2, RA], [Pbs/2, RA - FLy], [Pbs, RA - FLy], [Pbs, RA - FLy + RB], [Pbs + d2, RA - FLy + RB], [Pbs + d2, RA - FLy + RB - FW]]);
+              </script>
+            </div>
+            <div>
+              <svg-plot
+                class = "variable"
+                name = "Mplot"
+                title = "Moment Plot"
+                x-label = "$x \tx{ (mm)}$"
+                y-label = "$m \tx{ (kN}\cdot \tx{mm)}$"
+                plot-size = "300, 90"
+                grid-on>
+              </svg-plot>
+              <script type = "solver">
+                let t1 = Pbs/2;
+                let t2 = Pbs;
+                let t3 = Pbs + (Pbw + Gbw)/2 + Clr;
+
+                let ymin = null;
+                let ymax = null;
+
+                let line = [];
+                let FLy = FL * Math.cos(15 * Math.PI / 180);
+                for (let x = 0; x <= t3; x+=0.5) {
+                  let y = 0;
+                  if (x <= t1) {
+                    y = RA * x;
+                  } else if (x <= t2) {
+                    y = RA * x - FLy * (x - t1);
+                  } else if (x <= t3) {
+                    y = RA * x - FLy * (x - t1) + (x - t2) * RB;
+                  }
+                  if (ymin == null || ymin > y) ymin = y;
+                  if (ymax == null || ymax < y) ymax = y;
+                  line.push([x, y]);
+                }
+
+                Mplot.axisStart = `-20,  ${ymin - 500}`;
+                Mplot.axisEnd = `${t3 + 20}, ${ymax + 500}`;
+                Mplot.line("moment", line);
+
+                return {M_x: line}
+              </script>
+            </div>
           </div>
-          <div>
-            <svg-plot
-            class = "variable"
-            name = "Mplot"
-            title = "Moment Plot"
-            x-label = "$x \tx{ (mm)}$"
-            y-label = "$m \tx{ (kN}\cdot \tx{mm)}$"
-            plot-size = "300, 90"
-            grid-on>
-          </svg-plot>
-          <script type = "solver">
-            let t1 = Pbs/2;
-            let t2 = Pbs;
-            let t3 = Pbs + (Pbw + Gbw)/2 + Clr;
+          <figcaption>
+            Shear Force and Moment diagrams along the shaft.
+          </figcaption>
+        </figure>
+        <output>
+          The maximum vertical shear force
+          $$V = {R_A}_y - F_L\cos \phi = ~2[V]{RA - FL * cos(phi)} \tx{ kN}$$
+          The moment experienced at the chain about the $z$ axis
+          $$m_q = \cfrac{\tx{Pbs}}{2}{R_A}_y = ~2[mq]{Pbs * (RA) / 2} \tx{ kN} \cdot \tx{mm}$$
+          The maximum moment about the $z$ axis was at point $B$
+          $$M_q = \cfrac{\tx{Pbs}}{2}(2{R_A}_y - F_L\cos \phi) = ~1[Mq]{(2 * RA - FL * cos(phi)) * Pbs/2} \tx{ kN} \cdot \tx{mm}$$
+        </output>
 
-            let ymin = null;
-            let ymax = null;
+        <figure style = "margin-left: 5em; margin-right: 5em;">
+          <img src = "https://mech3460.w4v.es/A3/fig_FBD_zx.svg" />
+          <figcaption>
+            FBD of Shaft (from above)
+          </figcaption>
+        </figure>
+        <output>
 
-            let line = [];
-            let FLy = FL * Math.cos(15 * Math.PI / 180);
-            for (let x = 0; x <= t3; x+=0.5) {
-              let y = 0;
-              if (x <= t1) {
-                y = RA * x;
-              } else if (x <= t2) {
-                y = RA * x - FLy * (x - t1);
-              } else if (x <= t3) {
-                y = RA * x - FLy * (x - t1) + (x - t2) * RB;
-              }
-              if (ymin == null || ymin > y) ymin = y;
-              if (ymax == null || ymax < y) ymax = y;
-              line.push([x, y]);
-            }
+          Looking at Figure 4 and taking the sum of moments about $A$ the horizontal component of $R_B$ was found
+          $$ {R_B}_z = \frac{1}{2}F_L\sin \phi = ~[RBz]{(1/2) * FL * sin(phi)} \tx{ kN}$$
+          By taking the sum of forces in the $z$ axis we can find the horizontal component of $R_A$
+          $${R_A}_z = {R_B}_z = ~[RAz]{RBz} \tx{ kN}$$
+          In this way the maximum moment about the $y$ axis will be between points $A$ and $B$
+          $$m_y = \frac{\tx{Pbs}}{2}F_L \sin \phi = ~[my]{(Pbs/2) * RAz} \tx{ kN} \cdot \tx{mm}$$
 
-            Mplot.axisStart = `-20,  ${ymin - 500}`;
-            Mplot.axisEnd = `${t3 + 20}, ${ymax + 500}`;
-            Mplot.line("moment", line);
+          Finaly the total magnitude of reaction the forces was found to be
+          $$R_A = ~[SRA]{sqrt(RA*RA + RAz*RAz)}\tx{ kN}$$
+          $$R_B = ~[SRB]{sqrt(RB*RB + RBz*RBz)}\tx{ kN}$$
 
-            return {M_x: line}
-          </script>
-        </div>
-      </div>
-      <figcaption>
-        Shear Force and Moment diagrams along the shaft.
-      </figcaption>
-    </figure>
-
-    <output>
-      The maximum vertical shear force
-      $$V = {R_A}_y - F_L\cos \phi = ~2[V]{RA - FL * cos(phi)} \tx{ kN}$$
-      The moment experienced at the chain about the $z$ axis
-      $$m_q = \cfrac{\tx{Pbs}}{2}{R_A}_y = ~2[mq]{Pbs * (RA) / 2} \tx{ kN} \cdot \tx{mm}$$
-      The maximum moment about the $z$ axis was at point $B$
-      $$M_q = \cfrac{\tx{Pbs}}{2}(2{R_A}_y - F_L\cos \phi) = ~1[Mq]{(2 * RA - FL * cos(phi)) * Pbs/2} \tx{ kN} \cdot \tx{mm}$$
-    </output>
-
-    <figure style = "margin-left: 5em; margin-right: 5em;">
-      <img src = "https://mech3460.w4v.es/A3/fig_FBD_zx.svg" />
-      <figcaption>
-        FBD of Shaft (from above)
-      </figcaption>
-    </figure>
-    <output>
-
-      Looking at Figure 4 and taking the sum of moments about $A$ the horizontal component of $R_B$ was found
-      $$ {R_B}_z = \frac{1}{2}F_L\sin \phi = ~[RBz]{(1/2) * FL * sin(phi)} \tx{ kN}$$
-      By taking the sum of forces in the $z$ axis we can find the horizontal component of $R_A$
-      $${R_A}_z = {R_B}_z = ~[RAz]{RBz} \tx{ kN}$$
-      In this way the maximum moment about the $y$ axis will be between points $A$ and $B$
-      $$m_y = \frac{\tx{Pbs}}{2}F_L \sin \phi = ~[my]{(Pbs/2) * RAz} \tx{ kN} \cdot \tx{mm}$$
-
-      Finaly the total magnitude of reaction the forces was found to be
-      $$R_A = ~[SRA]{sqrt(RA*RA + RAz*RAz)}\tx{ kN}$$
-      $$R_B = ~[SRB]{sqrt(RB*RB + RBz*RBz)}\tx{ kN}$$
-
-      No axial thrust was applied and hence $P_q = ~1[Pq]{0}$
-    </output>
-  </section>
+          No axial thrust was applied and hence $P_q = ~1[Pq]{0}$
+        </output>
+      </section>
 
       <!-- Shaft Design Process (15) -->
       <section>
@@ -367,7 +388,9 @@
             was used to find a better diamter $\hat{D}$ from a guess diameter $D$.
             Itterations where continued until $\left| \cfrac{\hat{D} - D}{\hat{D}} \right| \le 0.1\%$.
             Given the trial diameter of $D_0 = ~{D0}\text{mm}$ a final diameter of
-            $$D_1 = ~{D1}\text{mm}$$
+            $$D_1 = ~{D1}\text{mm}$$ was calculated. After selecting the gearbox and bearings it was noticed that a shaft step
+            would be required. This would introduce another stress raising factor as per the AS1403 standards.
+            As the step required was only small this factor was ignored.
           </output>
         </section>
 
@@ -839,7 +862,7 @@
       </section>
 
       <!-- Plumber Block and Bearing Selection -->
-      <section>
+      <section collapsed>
         <script type = "solver">
           let pbsel = [
             ["SYNT60",60,156,18.6,"ECY212"],
@@ -875,7 +898,8 @@
                 <!-- ~{table2HTMLRows(bearings, bearingsFormat)} -->
               </tbody>
             </table>
-            It can be seen from Table
+            From Table 5 the SYNT80 plumber block and bearing would be suitable for the application.
+
           </output>
         </section>
       </section>
@@ -1592,10 +1616,11 @@
             this will occur in the oppisite direction to the deflection caused by
             the chain drive. Taking second moment of inertia as $I = \cfrac{\pi D^4}{64}$ the maxmimum angular deflection at both plumber blocks calculated to be
 
-            $$\theta_{RA2} = ~3{180 * (Pbs * Pbs / 24) * (16 * RA - 5 * FL * sin(phi)) / (E * pow(D, 4) * pi * pi / 64)}$$
             $$\theta_{RA} = M_q\cfrac{\tx{Pbs} 16}{3 \pi D^4 E} = ~3[theta_a]{(180/pi) * Mq * (16 * Pbs) / (3 * E * pi * pow(D0, 4))}^\circ$$
             $$\theta_{RB} = 5M_q\cfrac{\tx{Pbs} 16}{3 \pi D^4 E} = ~3[theta_a]{(180/pi) * -5 * Mq * (16 * Pbs) / (3 * E * pi * pow(D0, 4))}^\circ$$
 
+            The SYNT bearings required an angular deflection no more than $0.5^\circ$. Hence angular deflection
+            should not cause any problems.
 
             <!-- $$\cfrac{dy}{dx} = \cfrac{1}{EI}\left[(R_A - F_L)\cfrac{x^2}{2} + \frac{\tx{Pbs}}{2}x + C\right]$$
             Taking $x = \cfrac{\tx{Pbs}}{2}$ gives

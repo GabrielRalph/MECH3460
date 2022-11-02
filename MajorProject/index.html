@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script type = "module" src = "../Solver/solver-frame.js"></script>
+
+  </head>
+  <body>
+    <solver-frame>
+      Velocity $v = $ <input class = "variable" name = "v_kmh" value = "100" /> $\tx{km/h}$ <output style = "display: inline">$\quad [~{v} \tx{ m/s}]$</output>
+      Area of sale $A = $ <input class = "variable" name = "A" value = "39" /> $\tx{m}^2$
+      Density of air $\rho = $ <input class = "variable" name = "rho" value = "1.29" /> $\tx{kg/m}^2$
+      Drag Coefficient $C_D = $ <input class = "variable" name = "CD" value = "1.39" />
+      <output>
+        $$F = \cfrac{1}{2}\rho v^2 C_D A = ~{0.5 * rho * v * v * A * CD / 1e3}\tx{ kN}$$
+      </output>
+      <script type = "solver">return {v: v_kmh * 1000 / (60 * 60)}</script>
+
+
+    </solver-frame>
+  </body>
+  <style>
+    solver-frame {
+      display: block;
+      white-space: pre;
+    }
+  </style>
+</html>
